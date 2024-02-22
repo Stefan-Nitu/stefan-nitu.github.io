@@ -83,7 +83,7 @@ implemented.</p>
     </ul>
   </li>
   <li><a href="#naming" id="markdown-toc-naming">Naming</a>    <ul>
-      <li><a href="#api-design-guidelines" id="markdown-toc-apples-api-style-guidelines">Apple’s API Style Guidelines</a></li>
+      <li><a href="#apples-api-style-guidelines" id="markdown-toc-apples-api-style-guidelines">Apple’s API Style Guidelines</a></li>
       <li><a href="#naming-conventions-are-not-access-control" id="markdown-toc-naming-conventions-are-not-access-control">Naming Conventions Are Not Access Control</a></li>
       <li><a href="#identifiers" id="markdown-toc-identifiers">Identifiers</a></li>
       <li><a href="#initializers" id="markdown-toc-initializers">Initializers</a></li>
@@ -543,11 +543,11 @@ contains a line break before the first element and after each element.</li>
   <li>A continuation line starting with an unbreakable token sequence is indented
 at the same level as the original line.</li>
   <li>A continuation line that is part of a vertically-oriented comma-delimited
-list is indented exactly +2 from the original line.</li>
+list is indented exactly +4 from the original line.</li>
   <li>
     <p>When an open curly brace (<code class="highlighter-rouge">{</code>) follows a line-wrapped declaration or
 expression, it is on the same line as the final continuation line unless that
-line is indented at +2 from the original line. In that case, the brace is
+line is indented at +4 from the original line. In that case, the brace is
 placed on its own line, to avoid the continuation lines from blending
 visually with the body of the subsequent block.</p>
 
@@ -732,7 +732,7 @@ similar).</p>
 <h4 id="function-calls">Function Calls</h4>
 
 <p>When a function call is line-wrapped, each argument is written on its own line,
-indented +2 from the original line.</p>
+indented +4 from the original line.</p>
 
 <p>As with function declarations, if the function call terminates its enclosing
 statement and ends with a closing parenthesis (<code class="highlighter-rouge">)</code>) (that is, it has no trailing
@@ -766,7 +766,7 @@ parentheses to distinguish it from the body of the closure below it.</p>
 wrapped, the first continuation line is indented to the same position as the
 token following the control flow keyword. Additional continuation lines are
 indented at that same position if they are syntactically parallel elements, or
-in +2 increments from that position if they are syntactically nested.</p>
+in +4 increments from that position if they are syntactically nested.</p>
 
 <p>The open brace (<code class="highlighter-rouge">{</code>) preceding the body of the control flow statement can either
 be placed on the same line as the last continuation line or on the next line,
@@ -819,10 +819,10 @@ the next line.</p>
 
 <p>When line-wrapping other expressions that are not function calls (as described
 above), the second line (the one immediately following the first break) is
-indented exactly +2 from the original line.</p>
+indented exactly +4 from the original line.</p>
 
 <p>When there are multiple continuation lines, indentation may be varied in
-increments of +2 as needed. In general, two continuation lines use the same
+increments of +4 as needed. In general, two continuation lines use the same
 indentation level if and only if they begin with syntactically parallel
 elements. However, if there are many continuation lines caused by long wrapped
 expressions, consider splitting them into multiple statements using temporary
@@ -1194,7 +1194,7 @@ C-style block format (<code class="highlighter-rouge">/* ... */</code>).</p>
 <h3 id="switch-statements">Switch Statements</h3>
 
 <p>Case statements are indented at the <em>same</em> level as the switch statement to
-which they belong; the statements inside the case blocks are then indented +2
+which they belong; the statements inside the case blocks are then indented +4
 spaces from that level.</p>
 
 <div class="language-swift good highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">switch</span> <span class="n">order</span> <span class="p">{</span>
@@ -1488,6 +1488,13 @@ line.</p>
 </code></pre></div></div>
 
 <h2 id="naming">Naming</h2>
+
+<h3 id="apples-api-style-guidelines">Apple’s API Style Guidelines</h3>
+
+<p>Apple’s
+<a href="#api-design-guidelines" id="markdown-toc-apples-api-style-guidelines">official Swift naming and API design guidelines</a>
+hosted on swift.org are considered part of this style guide and are followed as
+if they were repeated here in their entirety.</p>
 
 <h3 id="naming-conventions-are-not-access-control">Naming Conventions Are Not Access Control</h3>
 
