@@ -14,7 +14,7 @@ article table td code {
 }
 
 pre.lw-container {
-    overflow: scroll
+    overflow: visible;
 }
 
 pre.lw-container-numbered {
