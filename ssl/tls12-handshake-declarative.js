@@ -10,49 +10,17 @@ class TLS12HandshakeAnimation extends DeclarativeAnimation {
         this.serverKeys = document.getElementById('tls12-server-keys');
         this.clientCertDisplay = document.getElementById('tls12-client-cert');
 
-        this.setupButtons();
+        // Use base class button setup
+        this.setupButtons('tls12-play', 'tls12-step', 'tls12-reset');
+
+        // Define subclass-specific reset behavior
+        this.onReset = () => {
+            this.serverKeys.style.display = 'none';
+            if (this.clientCertDisplay) this.clientCertDisplay.style.display = 'none';
+            this.statusEl.textContent = 'TLS 1.2 - Complete handshake process with all details';
+        };
+
         this.defineAnimationSteps();
-    }
-
-    setupButtons() {
-        this.playBtn = document.getElementById('tls12-play');
-        this.stepBtn = document.getElementById('tls12-step');
-        this.resetBtn = document.getElementById('tls12-reset');
-
-        if (this.playBtn) this.playBtn.addEventListener('click', () => this.handlePlay());
-        if (this.stepBtn) this.stepBtn.addEventListener('click', () => this.handleStep());
-        if (this.resetBtn) this.resetBtn.addEventListener('click', () => this.handleReset());
-    }
-
-    async handlePlay() {
-        this.playBtn.disabled = true;
-        this.stepBtn.disabled = true;
-        await this.play();
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-    }
-
-    async handleStep() {
-        this.stepBtn.disabled = true;
-        await this.step();
-
-        if (this.currentStep >= this.steps.length) {
-            this.stepBtn.textContent = '✅ Complete';
-        } else {
-            this.stepBtn.disabled = false;
-            this.stepBtn.textContent = '⏭️ Next Step';
-        }
-    }
-
-    handleReset() {
-        this.reset();
-        this.serverKeys.style.display = 'none';
-        if (this.clientCertDisplay) this.clientCertDisplay.style.display = 'none';
-
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-        this.stepBtn.textContent = '⏭️ Next Step';
-        this.statusEl.textContent = 'TLS 1.2 - Complete handshake process with all details';
     }
 
     defineAnimationSteps() {

@@ -7,46 +7,15 @@ class TLS13HandshakeAnimation extends DeclarativeAnimation {
         this.clientEl = stage.querySelector('.client');
         this.serverEl = stage.querySelector('.server');
         this.caEl = stage.querySelector('.ca');
-        this.setupButtons();
+        // Use base class button setup
+        this.setupButtons('tls13-play', 'tls13-step', 'tls13-reset');
+
+        // Define subclass-specific reset behavior
+        this.onReset = () => {
+            this.statusEl.textContent = 'TLS 1.3 - Modern, fast, and secure handshake';
+        };
+
         this.defineAnimationSteps();
-    }
-
-    setupButtons() {
-        this.playBtn = document.getElementById('tls13-play');
-        this.stepBtn = document.getElementById('tls13-step');
-        this.resetBtn = document.getElementById('tls13-reset');
-
-        if (this.playBtn) this.playBtn.addEventListener('click', () => this.handlePlay());
-        if (this.stepBtn) this.stepBtn.addEventListener('click', () => this.handleStep());
-        if (this.resetBtn) this.resetBtn.addEventListener('click', () => this.handleReset());
-    }
-
-    async handlePlay() {
-        this.playBtn.disabled = true;
-        this.stepBtn.disabled = true;
-        await this.play();
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-    }
-
-    async handleStep() {
-        this.stepBtn.disabled = true;
-        await this.step();
-
-        if (this.currentStep >= this.steps.length) {
-            this.stepBtn.textContent = '✅ Complete';
-        } else {
-            this.stepBtn.disabled = false;
-            this.stepBtn.textContent = '⏭️ Next Step';
-        }
-    }
-
-    handleReset() {
-        this.reset();
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-        this.stepBtn.textContent = '⏭️ Next Step';
-        this.statusEl.textContent = 'TLS 1.3 - Modern, fast, and secure handshake';
     }
 
     defineAnimationSteps() {

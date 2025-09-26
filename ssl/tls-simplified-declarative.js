@@ -10,64 +10,29 @@ class TLSSimplifiedAnimation extends DeclarativeAnimation {
         this.serverKeys = document.getElementById('simple-server-keys');
         this.clientCertDisplay = document.getElementById('simple-client-cert');
 
-        this.setupButtons();
+        // Use base class button setup
+        this.setupButtons('tls-simple-play', 'tls-simple-step', 'tls-simple-reset');
+
+        // Define subclass-specific reset behavior
+        this.onReset = () => {
+            // Clear any active timeouts
+            if (this.activeTimeouts) {
+                this.activeTimeouts.forEach(id => clearTimeout(id));
+                this.activeTimeouts = [];
+            }
+
+            // Clear any client animations immediately
+            if (this.clientEl) {
+                this.clientEl.style.animation = '';
+                this.clientEl.style.boxShadow = '';
+            }
+
+            if (this.serverKeys) this.serverKeys.style.display = 'none';
+            if (this.clientCertDisplay) this.clientCertDisplay.style.display = 'none';
+            this.statusEl.textContent = 'Click Play to watch the SSL handshake process';
+        };
+
         this.defineAnimationSteps();
-    }
-
-    setupButtons() {
-        this.playBtn = document.getElementById('tls-simple-play');
-        this.stepBtn = document.getElementById('tls-simple-step');
-        this.resetBtn = document.getElementById('tls-simple-reset');
-
-        if (this.playBtn) this.playBtn.addEventListener('click', () => this.handlePlay());
-        if (this.stepBtn) this.stepBtn.addEventListener('click', () => this.handleStep());
-        if (this.resetBtn) this.resetBtn.addEventListener('click', () => this.handleReset());
-    }
-
-    async handlePlay() {
-        this.playBtn.disabled = true;
-        this.stepBtn.disabled = true;
-        await this.play();
-        // Only re-enable buttons if not stopped by reset
-        if (!this.shouldStop) {
-            this.playBtn.disabled = false;
-            this.stepBtn.disabled = false;
-        }
-    }
-
-    async handleStep() {
-        this.stepBtn.disabled = true;
-        await this.step();
-
-        if (this.currentStep >= this.steps.length) {
-            this.stepBtn.textContent = '✅ Complete';
-        } else {
-            this.stepBtn.disabled = false;
-            this.stepBtn.textContent = '⏭️ Next Step';
-        }
-    }
-
-    handleReset() {
-        // Clear any active timeouts
-        if (this.activeTimeouts) {
-            this.activeTimeouts.forEach(id => clearTimeout(id));
-            this.activeTimeouts = [];
-        }
-
-        // Clear any client animations immediately
-        if (this.clientEl) {
-            this.clientEl.style.animation = '';
-            this.clientEl.style.boxShadow = '';
-        }
-
-        this.reset();
-        if (this.serverKeys) this.serverKeys.style.display = 'none';
-        if (this.clientCertDisplay) this.clientCertDisplay.style.display = 'none';
-
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-        this.stepBtn.textContent = '⏭️ Next Step';
-        this.statusEl.textContent = 'Click Play to watch the SSL handshake process';
     }
 
     defineAnimationSteps() {

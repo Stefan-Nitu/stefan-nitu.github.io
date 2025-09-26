@@ -11,52 +11,20 @@ class MITMAnimation extends DeclarativeAnimation {
         this.serverKeys = document.getElementById('mitm-server-keys');
         this.clientCert = document.getElementById('mitm-client-cert');
 
-        this.setupButtons();
+        // Use base class button setup
+        this.setupButtons('mitm-play', 'mitm-step', 'mitm-reset');
+
+        // Define subclass-specific reset behavior
+        this.onReset = () => {
+            this.attackerEl.classList.remove('show');
+            this.attackerEl.style.opacity = '';
+            if (this.attackerKeys) this.attackerKeys.style.display = 'none';
+            if (this.serverKeys) this.serverKeys.style.display = 'none';
+            if (this.clientCert) this.clientCert.style.display = 'none';
+            this.statusEl.textContent = 'See how attackers intercept "secure" connections';
+        };
+
         this.defineAnimationSteps();
-    }
-
-    setupButtons() {
-        this.playBtn = document.getElementById('mitm-play');
-        this.stepBtn = document.getElementById('mitm-step');
-        this.resetBtn = document.getElementById('mitm-reset');
-
-        if (this.playBtn) this.playBtn.addEventListener('click', () => this.handlePlay());
-        if (this.stepBtn) this.stepBtn.addEventListener('click', () => this.handleStep());
-        if (this.resetBtn) this.resetBtn.addEventListener('click', () => this.handleReset());
-    }
-
-    async handlePlay() {
-        this.playBtn.disabled = true;
-        this.stepBtn.disabled = true;
-        await this.play();
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-    }
-
-    async handleStep() {
-        this.stepBtn.disabled = true;
-        await this.step();
-
-        if (this.currentStep >= this.steps.length) {
-            this.stepBtn.textContent = '✅ Complete';
-        } else {
-            this.stepBtn.disabled = false;
-            this.stepBtn.textContent = '⏭️ Next Step';
-        }
-    }
-
-    handleReset() {
-        this.reset();
-        this.attackerEl.classList.remove('show');
-        this.attackerEl.style.opacity = '';
-        if (this.attackerKeys) this.attackerKeys.style.display = 'none';
-        if (this.serverKeys) this.serverKeys.style.display = 'none';
-        if (this.clientCert) this.clientCert.style.display = 'none';
-
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-        this.stepBtn.textContent = '⏭️ Next Step';
-        this.statusEl.textContent = 'See how attackers intercept "secure" connections';
     }
 
     defineAnimationSteps() {

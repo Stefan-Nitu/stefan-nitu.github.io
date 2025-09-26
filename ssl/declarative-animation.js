@@ -21,6 +21,68 @@ class DeclarativeAnimation {
         this.isPlaying = false;
         this.shouldStop = false;
         this.sleepTimeouts = [];
+
+        // Buttons can be set by subclasses
+        this.playBtn = null;
+        this.stepBtn = null;
+        this.resetBtn = null;
+    }
+
+    setupButtons(playBtnId, stepBtnId, resetBtnId) {
+        this.playBtn = document.getElementById(playBtnId);
+        this.stepBtn = document.getElementById(stepBtnId);
+        this.resetBtn = document.getElementById(resetBtnId);
+
+        if (this.playBtn) this.playBtn.addEventListener('click', () => this.handlePlay());
+        if (this.stepBtn) this.stepBtn.addEventListener('click', () => this.handleStep());
+        if (this.resetBtn) this.resetBtn.addEventListener('click', () => this.handleReset());
+    }
+
+    async handlePlay() {
+        if (this.playBtn) this.playBtn.disabled = true;
+        if (this.stepBtn) this.stepBtn.disabled = true;
+        await this.play();
+        if (this.playBtn) this.playBtn.disabled = false;
+        if (this.stepBtn) this.stepBtn.disabled = false;
+
+        // Update step button to show complete after play finishes
+        if (this.stepBtn && this.currentStep >= this.steps.length) {
+            this.stepBtn.textContent = '✅ Complete';
+        }
+    }
+
+    async handleStep() {
+        // If animation is complete and button is clicked, reset
+        if (this.currentStep >= this.steps.length) {
+            this.handleReset();
+            return;
+        }
+
+        if (this.stepBtn) this.stepBtn.disabled = true;
+        await this.step();
+
+        if (this.stepBtn) {
+            if (this.currentStep >= this.steps.length) {
+                this.stepBtn.textContent = '✅ Complete';
+            } else {
+                this.stepBtn.disabled = false;
+                this.stepBtn.textContent = '⏭️ Next Step';
+            }
+        }
+    }
+
+    handleReset() {
+        this.reset();
+        // Call subclass-specific reset if defined
+        if (this.onReset) {
+            this.onReset();
+        }
+
+        if (this.playBtn) this.playBtn.disabled = false;
+        if (this.stepBtn) {
+            this.stepBtn.disabled = false;
+            this.stepBtn.textContent = '⏭️ Next Step';
+        }
     }
 
     // Interruptible sleep
@@ -225,12 +287,12 @@ class DeclarativeAnimation {
     async play() {
         this.isPlaying = true;
         this.shouldStop = false;
-        // Reset currentStep for play mode
-        this.currentStep = 0;
 
-        for (let i = 0; i < this.steps.length; i++) {
+        // Continue from current position
+        for (let i = this.currentStep; i < this.steps.length; i++) {
             if (this.shouldStop) break;
             await this.executeStep(this.steps[i]);
+            this.currentStep = i + 1; // Track progress
             if (i < this.steps.length - 1 && !this.shouldStop) {
                 await this.sleep(1500); // Default delay between steps
             }
@@ -246,6 +308,9 @@ class DeclarativeAnimation {
         if (this.currentStep < this.steps.length) {
             await this.executeStep(this.steps[this.currentStep]);
             this.currentStep++;
+        } else {
+            // Reset when trying to step past the end
+            this.reset();
         }
     }
 

@@ -12,56 +12,24 @@ class SSLPinningAnimation extends DeclarativeAnimation {
         this.attackerKeys = document.getElementById('pin-attacker-keys');
         this.serverKeys = document.getElementById('pin-server-keys');
 
-        this.setupButtons();
+        // Use base class button setup
+        this.setupButtons('pin-play', 'pin-step', 'pin-reset');
+
+        // Define subclass-specific reset behavior
+        this.onReset = () => {
+            this.attackerEl.classList.remove('show');
+            this.attackerEl.style.opacity = '';
+            this.shieldEl.style.display = 'none';
+            this.shieldEl.classList.remove('show');
+            this.shieldEl.style.animation = '';
+
+            if (this.clientPinned) this.clientPinned.style.display = 'none';
+            if (this.attackerKeys) this.attackerKeys.style.display = 'none';
+            if (this.serverKeys) this.serverKeys.style.display = 'none';
+            this.statusEl.textContent = 'Learn how apps protect against MITM by "pinning" the exact certificate';
+        };
+
         this.defineAnimationSteps();
-    }
-
-    setupButtons() {
-        this.playBtn = document.getElementById('pin-play');
-        this.stepBtn = document.getElementById('pin-step');
-        this.resetBtn = document.getElementById('pin-reset');
-
-        if (this.playBtn) this.playBtn.addEventListener('click', () => this.handlePlay());
-        if (this.stepBtn) this.stepBtn.addEventListener('click', () => this.handleStep());
-        if (this.resetBtn) this.resetBtn.addEventListener('click', () => this.handleReset());
-    }
-
-    async handlePlay() {
-        this.playBtn.disabled = true;
-        this.stepBtn.disabled = true;
-        await this.play();
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-    }
-
-    async handleStep() {
-        this.stepBtn.disabled = true;
-        await this.step();
-
-        if (this.currentStep >= this.steps.length) {
-            this.stepBtn.textContent = '✅ Complete';
-        } else {
-            this.stepBtn.disabled = false;
-            this.stepBtn.textContent = '⏭️ Next Step';
-        }
-    }
-
-    handleReset() {
-        this.reset();
-        this.attackerEl.classList.remove('show');
-        this.attackerEl.style.opacity = '';
-        this.shieldEl.style.display = 'none';
-        this.shieldEl.classList.remove('show');
-        this.shieldEl.style.animation = '';
-
-        if (this.clientPinned) this.clientPinned.style.display = 'none';
-        if (this.attackerKeys) this.attackerKeys.style.display = 'none';
-        if (this.serverKeys) this.serverKeys.style.display = 'none';
-
-        this.playBtn.disabled = false;
-        this.stepBtn.disabled = false;
-        this.stepBtn.textContent = '⏭️ Next Step';
-        this.statusEl.textContent = 'Learn how apps protect against MITM by "pinning" the exact certificate';
     }
 
     defineAnimationSteps() {
