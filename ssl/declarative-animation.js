@@ -215,9 +215,10 @@ class DeclarativeAnimation {
         const toRect = to.getBoundingClientRect();
         const stageRect = this.stage.getBoundingClientRect();
 
-        // Calculate packet dimensions (approximate)
-        const packetWidth = 170;
-        const packetHeight = 30;
+        // Calculate packet dimensions - responsive for mobile
+        const isMobile = window.innerWidth <= 768;
+        const packetWidth = isMobile ? 120 : 170;
+        const packetHeight = isMobile ? 24 : 30;
 
         // Calculate positions relative to stage
         const fromCenter = {
@@ -264,14 +265,15 @@ class DeclarativeAnimation {
         packet.style.opacity = '1';
         packet.style.transform = 'scale(1)';
 
-        await this.sleep(300);
+        await this.sleep(isMobile ? 200 : 300);
 
-        // Move to destination edge
-        packet.style.transition = 'all 1.5s ease-in-out';
+        // Move to destination edge - faster on mobile
+        const animDuration = isMobile ? 1 : 1.5;
+        packet.style.transition = `all ${animDuration}s ease-in-out`;
         packet.style.left = `${endX}px`;
         packet.style.top = `${endY}px`;
 
-        await this.sleep(options.duration || 1500);
+        await this.sleep(options.duration || (isMobile ? 1000 : 1500));
 
         if (options.key) {
             this.registerElement(options.key, packet);

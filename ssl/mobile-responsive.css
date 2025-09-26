@@ -1,279 +1,288 @@
 /* Mobile Responsive Styles for TLS Animations */
 
-/* Mobile screens (up to 768px) */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
-    }
-
-    h2 {
-        font-size: 1.2em;
-    }
-
-    .demo-section {
-        padding: 20px 15px;
-        margin-bottom: 20px;
-    }
-
-    .controls {
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-
-    button {
-        padding: 10px 20px;
-        font-size: 12px;
-        flex: 1;
-        min-width: 100px;
-    }
-
-    /* Stage layout adjustments */
-    .stage {
-        min-height: 600px;
-        padding-bottom: 30px;
-    }
-
-    /* Entities positioned in triangle formation for mobile */
-    .entity {
-        width: 100px;
-        height: 120px;
-        padding: 8px;
-        font-size: 10px;
-    }
-
-    .entity-icon {
-        font-size: 24px;
-        margin-bottom: 2px;
-    }
-
-    .entity-label {
-        font-size: 10px;
-    }
-
-    /* Client - bottom left */
-    .client {
-        left: 20px;
-        top: 300px;
-    }
-
-    /* Server - bottom right */
-    .server {
-        right: 20px;
-        top: 300px;
-    }
-
-    /* CA - top center */
-    .ca {
-        left: 50%;
-        top: 80px;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 80px;
-    }
-
-    /* Attacker - center */
-    .attacker {
-        left: 50%;
-        top: 200px;
-        transform: translateX(-50%) scale(0);
-    }
-
-    .attacker.show {
-        transform: translateX(-50%) scale(1);
-    }
-
-    /* Detail boxes positioned below entities */
-    .detail-box {
-        position: absolute;
-        max-width: calc(100% - 40px);
-        font-size: 10px;
-        padding: 10px;
-        line-height: 1.4;
-    }
-
-    /* Adjust all message positions for mobile */
-    /* Messages appear at 450px (below entities at 300-420px) */
-    .detail-box {
-        top: 450px !important;
-    }
-
-    /* Stack multiple messages vertically */
-    .detail-box:nth-of-type(2) {
-        top: 550px !important;
-    }
-
-    .detail-box:nth-of-type(3) {
-        top: 650px !important;
-    }
-
-    /* Center all detail boxes horizontally on mobile */
-    .detail-box {
-        left: 20px !important;
-        right: 20px !important;
-        transform: none !important;
-    }
-
-    /* Smaller packets */
-    .packet {
-        padding: 6px 10px;
-        font-size: 10px;
-        max-width: 200px;
-    }
-
-    /* Key pair visual adjustments */
-    .key-pair-visual {
-        max-width: 90px;
-        padding: 4px 6px;
-    }
-
-    .key-pair-label {
-        font-size: 8px;
-    }
-
-    .key-item {
-        font-size: 8px;
-        padding: 2px 4px;
-    }
-
-    .key-item .icon {
-        font-size: 10px;
-    }
-
-    /* Shield positioning */
-    .shield {
-        font-size: 30px;
-        top: -20px;
-        right: -20px;
-    }
-
-    /* Description text */
-    .description {
-        font-size: 12px;
-        padding: 15px;
-        margin-top: 15px;
-    }
-}
-
-/* Small mobile screens (up to 480px) */
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.5em;
-    }
-
+/* Tablet screens (768px to 1024px) */
+@media (max-width: 1024px) {
     .stage {
         min-height: 550px;
     }
 
-    /* Even smaller entities */
+    .entity {
+        width: 120px;
+        height: 140px;
+        font-size: 11px;
+    }
+
+    .detail-box {
+        max-width: 280px;
+        font-size: 11px;
+    }
+}
+
+/* Mobile screens (up to 768px) */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 1.1em;
+    }
+
+    .demo-section {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 12px;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+        justify-content: center;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 11px;
+        flex: 1;
+        min-width: 80px;
+        max-width: 120px;
+    }
+
+    /* Stage - make it scrollable if needed */
+    .stage {
+        min-height: 500px;
+        max-height: 70vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 20px 10px;
+        position: relative;
+    }
+
+    /* Scale down entities for mobile */
     .entity {
         width: 80px;
         height: 100px;
         padding: 6px;
+        font-size: 9px;
+        transform: scale(0.9);
     }
 
     .entity-icon {
         font-size: 20px;
+        margin-bottom: 2px;
     }
 
     .entity-label {
         font-size: 9px;
+        line-height: 1.2;
     }
 
-    /* Adjust entity positions for very small screens */
+    /* Reposition entities for mobile viewport */
     .client {
         left: 10px;
-        top: 280px;
+        top: 250px;
     }
 
     .server {
         right: 10px;
-        top: 280px;
+        top: 250px;
     }
 
     .ca {
-        top: 60px;
+        left: 50%;
+        top: 50px;
+        transform: translateX(-50%) scale(0.8);
         width: 70px;
         height: 70px;
     }
 
     .attacker {
-        top: 180px;
+        left: 50%;
+        top: 150px;
+        transform: translateX(-50%) scale(0);
     }
 
-    /* Detail boxes start lower */
+    .attacker.show {
+        transform: translateX(-50%) scale(0.9);
+    }
+
+    /* Detail boxes - let them flow naturally */
     .detail-box {
-        top: 400px !important;
+        position: absolute;
+        max-width: 85%;
         font-size: 9px;
         padding: 8px;
-        left: 10px !important;
-        right: 10px !important;
+        line-height: 1.3;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        background: rgba(10, 10, 15, 0.98);
+        z-index: 100;
     }
 
-    .detail-box:nth-of-type(2) {
-        top: 480px !important;
-    }
-
-    .detail-box:nth-of-type(3) {
-        top: 560px !important;
-    }
-
-    /* Smaller controls */
-    button {
-        padding: 8px 15px;
-        font-size: 11px;
+    /* Don't force positions, let animation position them */
+    .detail-box[style*="top"] {
+        /* Keep original positioning */
     }
 
     /* Smaller packets */
     .packet {
         padding: 4px 8px;
         font-size: 9px;
-        max-width: 100px;
+        max-width: 150px;
+        border-radius: 12px;
+    }
+
+    /* Connection lines */
+    .connection-line {
+        stroke-width: 2;
+    }
+
+    /* Key pair visual */
+    .key-pair-visual {
+        max-width: 75px;
+        padding: 3px 5px;
+        font-size: 7px;
+    }
+
+    .key-pair-label {
+        font-size: 7px;
+        margin-bottom: 2px;
+    }
+
+    .key-item {
+        font-size: 7px;
+        padding: 1px 3px;
+        margin: 1px 0;
+    }
+
+    .key-item .icon {
+        font-size: 9px;
+    }
+
+    /* Certificate display */
+    .cert-display {
+        padding: 3px 5px;
+        font-size: 8px;
+    }
+
+    /* Shield for pinning animation */
+    .shield {
+        width: 50px;
+        height: 60px;
+        font-size: 24px;
+        left: 50%;
+        top: 200px;
+        transform: translateX(-50%) scale(0);
+    }
+
+    .shield.show {
+        transform: translateX(-50%) scale(1);
+    }
+
+    /* Status text */
+    .status {
+        font-size: 12px;
+        padding: 8px;
+        min-height: 35px;
+    }
+
+    /* Hide overflow text on small screens */
+    @media (max-width: 380px) {
+        .detail-box {
+            font-size: 8px;
+            padding: 6px;
+        }
+
+        .entity {
+            transform: scale(0.8);
+        }
+
+        button {
+            font-size: 10px;
+            padding: 6px 12px;
+        }
     }
 }
 
-/* Tablet Portrait (768px to 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
+/* Very small screens (below 380px) */
+@media (max-width: 380px) {
+    h1 {
+        font-size: 1.3em;
+    }
+
+    .demo-section {
+        padding: 10px;
+    }
+
     .stage {
-        min-height: 700px;
+        min-height: 450px;
     }
 
-    .entity {
-        width: 140px;
-        height: 160px;
-    }
-
-    .detail-box {
-        max-width: 280px;
-        font-size: 10px;
-    }
-
-    /* Position entities closer together */
-    .client {
-        left: 30px;
-        top: 220px;
-    }
-
-    .server {
-        right: 30px;
-        top: 220px;
+    /* Further scale down entities */
+    .client, .server {
+        width: 70px;
+        height: 85px;
     }
 
     .ca {
-        top: 80px;
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .stage {
+        min-height: 400px;
+        max-height: 60vh;
+    }
+
+    .entity {
+        transform: scale(0.8);
+    }
+
+    .client {
+        top: 200px;
+    }
+
+    .server {
+        top: 200px;
+    }
+
+    .ca {
+        top: 40px;
     }
 
     .attacker {
-        top: 220px;
+        top: 120px;
     }
 
-    /* Detail boxes at 420px */
     .detail-box {
-        top: 420px !important;
+        max-width: 75%;
+        font-size: 8px;
+    }
+}
+
+/* Ensure animations work smoothly on mobile */
+@media (max-width: 768px) {
+    /* Disable complex animations on mobile for performance */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* Simplify packet animations */
+    .packet {
+        transition: all 0.8s ease-in-out !important;
     }
 }
