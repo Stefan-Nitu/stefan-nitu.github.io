@@ -1,0 +1,26 @@
+{
+  "name": "ssl-animations",
+  "version": "1.0.0",
+  "description": "SSL/TLS animation visualizations",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.5",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+    "testMatch": [
+      "**/ssl/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "ssl/**/*.js",
+      "!ssl/**/*.test.js"
+    ]
+  }
+}

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL/TLS Security - Complete Animations</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 SSL/TLS Security Visualized</h1>
+
+        <!-- SSL Handshake -->
+        <div class="demo-section">
+            <h2>1. Normal SSL/TLS Connection</h2>
+            <div class="controls">
+                <button id="ssl-play">▶️ Play Animation</button>
+                <button id="ssl-step">⏭️ Next Step</button>
+                <button id="ssl-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="ssl-stage">
+                <div class="step-indicator" id="ssl-status">
+                    Click Play to watch the SSL handshake process
+                </div>
+
+                <div class="entity client">
+                    <div class="entity-icon">📱</div>
+                    <div class="entity-label">iOS App</div>
+                    <div class="key-pair-visual" id="client-cert" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ff88;">Has Received:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>SERVER CERT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="entity server">
+                    <div class="entity-icon">🏦</div>
+                    <div class="entity-label">Server</div>
+                    <div class="key-pair-visual" id="server-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ffff;">Server Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>PUBLIC CERT</span>
+                            </div>
+                            <div class="key-item real-private-key">
+                                <span class="icon">🔑</span>
+                                <span>PRIVATE KEY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="entity ca">
+                    <div class="entity-icon">🏛️</div>
+                    <div class="entity-label">iOS Trusted<br>CAs</div>
+                </div>
+            </div>
+
+            <div class="description">
+                Watch how SSL creates a secure connection through certificate verification and key exchange
+            </div>
+        </div>
+
+        <!-- MITM Attack -->
+        <div class="demo-section">
+            <h2>2. Man-in-the-Middle Attack</h2>
+            <div class="controls">
+                <button id="mitm-play">▶️ Play Attack</button>
+                <button id="mitm-step">⏭️ Next Step</button>
+                <button id="mitm-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="mitm-stage">
+                <div class="step-indicator" id="mitm-status">
+                    See how attackers intercept "secure" connections
+                </div>
+
+                <div class="entity client" id="mitm-client">
+                    <div class="entity-icon">📱</div>
+                    <div class="entity-label">iOS App</div>
+                    <div class="key-pair-visual" id="mitm-client-cert" style="display:none;">
+                        <div class="key-pair-label" style="color: #ff9999;">Received From Attacker:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item fake-public-cert">
+                                <span class="icon">📜</span>
+                                <span>FAKE CERT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="entity attacker" id="mitm-attacker">
+                    <div class="entity-icon">👹</div>
+                    <div class="entity-label">ATTACKER</div>
+                    <div class="key-pair-visual" id="attacker-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #ff6666;">Attacker Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item fake-public-cert">
+                                <span class="icon">📜</span>
+                                <span>FAKE CERT</span>
+                            </div>
+                            <div class="key-item fake-private-key">
+                                <span class="icon">🔑</span>
+                                <span>FAKE PRIVATE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="entity server" id="mitm-server">
+                    <div class="entity-icon">🏦</div>
+                    <div class="entity-label">Server</div>
+                    <div class="key-pair-visual" id="mitm-server-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ffff;">Server Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>REAL CERT</span>
+                            </div>
+                            <div class="key-item real-private-key">
+                                <span class="icon">🔑</span>
+                                <span>REAL PRIVATE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="description">
+                The attacker has TWO certificates: a fake one for you, the real one with the server
+            </div>
+        </div>
+
+        <!-- SSL Pinning -->
+        <div class="demo-section">
+            <h2>3. SSL Pinning Protection</h2>
+            <div class="controls">
+                <button id="pin-play">▶️ Play Protection</button>
+                <button id="pin-step">⏭️ Next Step</button>
+                <button id="pin-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="pin-stage">
+                <div class="step-indicator" id="pin-status">
+                    Learn how apps protect against MITM by "pinning" the exact certificate
+                </div>
+
+                <div class="entity client" id="pin-client">
+                    <div class="entity-icon">📱</div>
+                    <div class="entity-label">iOS App</div>
+                    <div class="shield" id="pin-shield">🛡️</div>
+                    <div class="key-pair-visual" id="pin-client-pinned" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ff88;">📌 Pinned:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>REAL CERT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="entity attacker" id="pin-attacker">
+                    <div class="entity-icon">👹</div>
+                    <div class="entity-label">ATTACKER</div>
+                    <div class="key-pair-visual" id="pin-attacker-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #ff6666;">Attacker Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item fake-public-cert">
+                                <span class="icon">📜</span>
+                                <span>FAKE CERT</span>
+                            </div>
+                            <div class="key-item fake-private-key">
+                                <span class="icon">🔑</span>
+                                <span>FAKE PRIVATE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="entity server" id="pin-server">
+                    <div class="entity-icon">🏦</div>
+                    <div class="entity-label">Server</div>
+                    <div class="key-pair-visual" id="pin-server-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ffff;">Server Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>REAL CERT</span>
+                            </div>
+                            <div class="key-item real-private-key">
+                                <span class="icon">🔑</span>
+                                <span>REAL PRIVATE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="description">
+                The app has the server's certificate fingerprint hardcoded and rejects anything else
+            </div>
+        </div>
+    </div>
+
+    <!-- Core animation framework -->
+    <script src="shared.js"></script>
+    <script src="config.js"></script>
+    <script src="animations.js"></script>
+    <script src="sleep-patch.js"></script>
+
+    <!-- Animation implementations -->
+    <script src="handshake.js"></script>
+    <script src="mitm.js"></script>
+    <script src="pinning.js"></script>
+
+    <script>
+        // Initialize all animations
+        const sslHandshake = new SSLHandshakeAnimation();
+        const mitmAttack = new MITMAnimation();
+        const sslPinning = new SSLPinningAnimation();
+    </script>
+</body>
+</html>
