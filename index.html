@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iOS Security & Development Resources</title>
+    <title>Stefan Nitu - Resources</title>
     <style>
         * {
             margin: 0;
@@ -12,30 +12,26 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+            background: #1c1c1e;
             color: #f2f2f7;
             min-height: 100vh;
-            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        header {
+            max-width: 600px;
+            width: 100%;
             text-align: center;
-            margin-bottom: 60px;
-            padding-bottom: 40px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         h1 {
-            font-size: 3em;
+            font-size: 2.5em;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             background: linear-gradient(135deg, #007AFF, #5856D6);
             -webkit-background-clip: text;
             background-clip: text;
@@ -43,351 +39,74 @@
         }
 
         .subtitle {
-            font-size: 1.3em;
-            color: #8e8e93;
-            font-weight: 400;
-        }
-
-        .section {
-            margin-bottom: 50px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-        }
-
-        h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #007AFF;
-            font-weight: 600;
-        }
-
-        h3 {
-            font-size: 1.4em;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            color: #5AC8FA;
-            font-weight: 600;
-        }
-
-        p {
-            margin-bottom: 15px;
-            color: #c7c7cc;
             font-size: 1.1em;
+            color: #8e8e93;
+            margin-bottom: 50px;
         }
 
-        .highlight-box {
-            background: rgba(0, 122, 255, 0.1);
-            border-left: 4px solid #007AFF;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
+        .resources {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .warning-box {
-            background: rgba(255, 59, 48, 0.1);
-            border-left: 4px solid #FF3B30;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-        }
-
-        .success-box {
-            background: rgba(52, 199, 89, 0.1);
-            border-left: 4px solid #34C759;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-        }
-
-        code {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
-            color: #5AC8FA;
-        }
-
-        pre {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            border-radius: 12px;
-            overflow-x: auto;
-            margin: 20px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        pre code {
-            background: none;
-            padding: 0;
-            color: #f2f2f7;
-        }
-
-        ul, ol {
-            margin-left: 30px;
-            margin-bottom: 20px;
-        }
-
-        li {
-            margin-bottom: 10px;
-            color: #c7c7cc;
-        }
-
-        .link-card {
-            display: block;
+        .resource-card {
             background: rgba(255, 255, 255, 0.05);
-            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 15px;
+            padding: 25px;
             text-decoration: none;
             color: inherit;
             transition: all 0.3s;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: block;
         }
 
-        .link-card:hover {
+        .resource-card:hover {
             background: rgba(255, 255, 255, 0.08);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        .link-card h3 {
+        .resource-card h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
             color: #007AFF;
-            margin-bottom: 10px;
         }
 
-        .link-card p {
-            color: #8e8e93;
+        .resource-card p {
+            color: #c7c7cc;
+            line-height: 1.5;
         }
 
-        .badge {
-            display: inline-block;
-            background: #007AFF;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-right: 8px;
-        }
-
-        .badge.security {
-            background: #FF3B30;
-        }
-
-        .badge.new {
-            background: #34C759;
-        }
-
-        .emoji-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
+        .icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
         }
 
         footer {
-            text-align: center;
-            padding: 40px 20px;
             margin-top: 60px;
+            padding-top: 30px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: #8e8e93;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>iOS Security & Development</h1>
-            <p class="subtitle">Educational Resources for iOS App Security and Network Protection</p>
-        </header>
+        <h1>Stefan Nitu</h1>
+        <p class="subtitle">Development & Security Resources</p>
 
-        <section class="section">
-            <h2>📱 iOS Network Security Fundamentals</h2>
-
-            <p>Modern iOS applications communicate with servers constantly - from banking apps handling sensitive transactions to social media apps syncing your data. Understanding how this communication is secured is crucial for every iOS developer.</p>
-
-            <div class="highlight-box">
-                <strong>Key Concept:</strong> iOS uses SSL/TLS certificates to create encrypted connections between your app and servers. Think of it like a sealed envelope that only the intended recipient can open.
-            </div>
-
-            <h3>Why Network Security Matters for iOS Apps</h3>
-            <ul>
-                <li><strong>User Trust:</strong> Users expect their personal data to be protected</li>
-                <li><strong>App Store Requirements:</strong> Apple requires proper security implementation</li>
-                <li><strong>Compliance:</strong> Financial and healthcare apps must meet strict security standards</li>
-                <li><strong>Reputation:</strong> Security breaches can destroy user confidence instantly</li>
-            </ul>
-        </section>
-
-        <section class="section">
-            <h2>🔐 Understanding SSL/TLS in iOS</h2>
-
-            <p>Every time your iOS app connects to a server over HTTPS, it uses SSL/TLS encryption. Here's what happens behind the scenes:</p>
-
-            <h3>The Certificate System</h3>
-            <p>iOS devices come with a built-in list of trusted Certificate Authorities (CAs). These are organizations that verify and sign certificates for websites and services. When your app connects to a server:</p>
-
-            <ol>
-                <li>The server sends its public certificate to your app</li>
-                <li>iOS checks if the certificate was signed by a trusted CA</li>
-                <li>If valid, iOS establishes an encrypted connection</li>
-                <li>All data between app and server is now encrypted</li>
-            </ol>
-
-            <div class="warning-box">
-                <strong>⚠️ The Problem:</strong> What if someone intercepts this connection and presents their own certificate? This is called a Man-in-the-Middle (MITM) attack, and it's a real threat on public WiFi networks.
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>🛡️ SSL Certificate Pinning in iOS</h2>
-
-            <p>Certificate pinning is a powerful security technique where your iOS app only accepts specific certificates, rather than any certificate signed by a trusted CA.</p>
-
-            <h3>How to Implement Certificate Pinning</h3>
-
-            <pre><code>// Swift example using URLSession
-class PinnedSessionDelegate: NSObject, URLSessionDelegate {
-    func urlSession(_ session: URLSession,
-                    didReceive challenge: URLAuthenticationChallenge,
-                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-
-        // Get the server's certificate
-        guard let serverTrust = challenge.protectionSpace.serverTrust,
-              let certificate = SecTrustGetCertificateAtIndex(serverTrust, 0) else {
-            completionHandler(.cancelAuthenticationChallenge, nil)
-            return
-        }
-
-        // Compare with pinned certificate
-        let serverCertData = SecCertificateCopyData(certificate) as Data
-        let pinnedCertData = loadPinnedCertificate() // Your pinned cert
-
-        if serverCertData == pinnedCertData {
-            completionHandler(.useCredential, URLCredential(trust: serverTrust))
-        } else {
-            // Certificate doesn't match - potential attack!
-            completionHandler(.cancelAuthenticationChallenge, nil)
-        }
-    }
-}</code></pre>
-
-            <div class="success-box">
-                <strong>✅ Benefits of Certificate Pinning:</strong>
-                <ul>
-                    <li>Prevents MITM attacks even on compromised networks</li>
-                    <li>Protects against rogue certificates</li>
-                    <li>Ensures your app only talks to your legitimate servers</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>🎓 Interactive SSL/TLS Demonstrations</h2>
-
-            <p>To better understand how SSL/TLS works and why certificate pinning is important, explore our interactive visualizations:</p>
-
-            <a href="ssl/index.html" class="link-card">
-                <div class="emoji-icon">🔐</div>
-                <h3>SSL/TLS Security Visualized</h3>
-                <p>Interactive animations showing how SSL creates secure connections, how MITM attacks work, and how certificate pinning protects your iOS apps.</p>
-                <span class="badge security">Security</span>
-                <span class="badge new">Interactive</span>
+        <div class="resources">
+            <a href="ssl/index.html" class="resource-card">
+                <span class="icon">🔐</span>
+                <h2>SSL/TLS Visualizations</h2>
+                <p>Interactive animations explaining how SSL/TLS protects network connections, MITM attacks, and certificate pinning.</p>
             </a>
-
-            <div class="highlight-box">
-                <strong>What you'll learn:</strong>
-                <ul>
-                    <li>How SSL/TLS handshake works step-by-step</li>
-                    <li>How attackers perform Man-in-the-Middle attacks</li>
-                    <li>Why certificate pinning blocks these attacks</li>
-                    <li>The difference between public and private keys</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>🚀 Best Practices for iOS Network Security</h2>
-
-            <h3>1. Always Use HTTPS</h3>
-            <p>Starting with iOS 9, Apple introduced App Transport Security (ATS) which requires all network connections to use HTTPS by default.</p>
-
-            <pre><code>// Info.plist - ATS is enabled by default
-// Only disable for specific domains if absolutely necessary
-&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
-&lt;dict&gt;
-    &lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;
-    &lt;false/&gt;
-&lt;/dict&gt;</code></pre>
-
-            <h3>2. Implement Certificate Pinning for Sensitive Apps</h3>
-            <p>Banking, healthcare, and apps handling sensitive data should always use certificate pinning.</p>
-
-            <h3>3. Handle Certificate Updates Gracefully</h3>
-            <p>Certificates expire. Plan for certificate rotation:</p>
-            <ul>
-                <li>Pin multiple certificates (current + next)</li>
-                <li>Implement a backup mechanism</li>
-                <li>Consider pinning the CA certificate instead of leaf certificate</li>
-            </ul>
-
-            <h3>4. Use iOS Security Frameworks</h3>
-            <p>Leverage iOS's built-in security features:</p>
-            <ul>
-                <li><code>SecureTransport</code> for low-level TLS</li>
-                <li><code>URLSession</code> with proper delegate methods</li>
-                <li><code>Network.framework</code> for modern networking</li>
-            </ul>
-        </section>
-
-        <section class="section">
-            <h2>📚 Additional Resources</h2>
-
-            <h3>Apple Documentation</h3>
-            <ul>
-                <li><a href="https://developer.apple.com/documentation/security" style="color: #007AFF;">Security Framework Documentation</a></li>
-                <li><a href="https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity" style="color: #007AFF;">App Transport Security</a></li>
-                <li><a href="https://developer.apple.com/documentation/network" style="color: #007AFF;">Network Framework</a></li>
-            </ul>
-
-            <h3>Testing Your Implementation</h3>
-            <p>Tools for testing SSL/TLS configuration:</p>
-            <ul>
-                <li><strong>Charles Proxy:</strong> Inspect HTTPS traffic from your iOS device</li>
-                <li><strong>Wireshark:</strong> Analyze network packets</li>
-                <li><strong>nscurl:</strong> Command-line tool to test ATS settings</li>
-            </ul>
-
-            <pre><code># Test your server's ATS compliance
-nscurl --ats-diagnostics https://yourserver.com</code></pre>
-        </section>
-
-        <section class="section">
-            <h2>⚠️ Common Security Mistakes to Avoid</h2>
-
-            <div class="warning-box">
-                <h3>Never Do These:</h3>
-                <ul>
-                    <li><strong>Disable ATS globally</strong> - Only disable for specific domains when absolutely necessary</li>
-                    <li><strong>Accept all certificates</strong> - Never bypass certificate validation in production</li>
-                    <li><strong>Store certificates in code</strong> - Use the iOS Keychain for sensitive data</li>
-                    <li><strong>Ignore certificate errors</strong> - Always handle SSL errors properly</li>
-                </ul>
-            </div>
-
-            <pre><code>// ❌ NEVER DO THIS IN PRODUCTION
-func urlSession(_ session: URLSession,
-                didReceive challenge: URLAuthenticationChallenge,
-                completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-    // This accepts ANY certificate - extremely dangerous!
-    completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
-}</code></pre>
-        </section>
+        </div>
 
         <footer>
-            <p>Learn more about iOS security best practices at <a href="https://developer.apple.com/security/" style="color: #007AFF;">developer.apple.com/security</a></p>
-            <p style="margin-top: 20px; font-size: 0.9em;">This educational resource demonstrates iOS network security concepts. Always follow Apple's latest security guidelines for production apps.</p>
+            <p>&nbsp;</p>
         </footer>
     </div>
 </body>
