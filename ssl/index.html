@@ -3,424 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSL/TLS Security - Interactive Visualization</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .back-link {
-            display: inline-block;
-            color: #00ffff;
-            text-decoration: none;
-            padding: 10px 20px;
-            background: rgba(0, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-
-        .back-link:hover {
-            background: rgba(0, 255, 255, 0.2);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #00ffff, #ff00ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .demo-section {
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #00ffff;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
-        }
-
-        button.playing {
-            background: linear-gradient(135deg, #ff6b6b, #ff4444);
-        }
-
-        .stage {
-            position: relative;
-            width: 100%;
-            height: 600px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .step-indicator {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.8);
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            min-height: 50px;
-        }
-
-        .entity {
-            position: absolute;
-            width: 140px;
-            height: 120px;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            background: linear-gradient(135deg, #1a1a3e, #2d2d5e);
-            border: 2px solid rgba(255,255,255,0.2);
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .client {
-            left: 50px;
-            top: 230px;
-            border-color: #00ffff;
-            box-shadow: 0 0 30px rgba(0,255,255,0.3);
-        }
-
-        .server {
-            right: 50px;
-            top: 230px;
-            border-color: #00ff00;
-            box-shadow: 0 0 30px rgba(0,255,0,0.3);
-        }
-
-        .attacker {
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            border-color: #ff0000;
-            box-shadow: 0 0 30px rgba(255,0,0,0.3);
-            opacity: 0;
-            z-index: 50;
-            transition: all 0.5s;
-        }
-
-        .attacker.show {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        .ca {
-            left: 50%;
-            top: 80px;
-            transform: translateX(-50%);
-            border-color: #ffd700;
-            box-shadow: 0 0 30px rgba(255,215,0,0.3);
-            width: 120px;
-        }
-
-        .entity-icon {
-            font-size: 36px;
-            margin-bottom: 8px;
-        }
-
-        .entity-label {
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .packet {
-            position: absolute;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            z-index: 60;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            white-space: nowrap;
-            opacity: 0;
-            transform: scale(0);
-            max-width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .packet.show {
-            opacity: 1;
-            transform: scale(1);
-            transition: all 0.3s;
-        }
-
-        .packet.moving {
-            transition: all 1.5s ease-in-out;
-        }
-
-        .packet-plain {
-            background: linear-gradient(135deg, #00ff88, #00cc70);
-            color: #000;
-            border: 2px solid #00ff88;
-        }
-
-        .packet-encrypted {
-            background: linear-gradient(135deg, #ff00ff, #cc00cc);
-            color: white;
-            border: 2px solid #ff00ff;
-        }
-
-        .packet-fake {
-            background: linear-gradient(135deg, #ff6b6b, #ff4444);
-            color: white;
-            border: 2px solid #ff0000;
-        }
-
-        .packet-cert {
-            background: linear-gradient(135deg, #ffd700, #ffcc00);
-            color: #000;
-            border: 2px solid #ffd700;
-        }
-
-        .fingerprint {
-            position: absolute;
-            background: rgba(0,0,0,0.9);
-            border: 2px solid #00ffff;
-            border-radius: 10px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 11px;
-            color: #00ffff;
-            opacity: 0;
-            transition: all 0.5s;
-            z-index: 80;
-        }
-
-        .fingerprint.show {
-            opacity: 1;
-        }
-
-        .comparison {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.95);
-            border: 3px solid #ffff00;
-            border-radius: 15px;
-            padding: 20px;
-            opacity: 0;
-            z-index: 90;
-            transition: all 0.5s;
-        }
-
-        .comparison.show {
-            opacity: 1;
-        }
-
-        .process-box {
-            position: absolute;
-            width: 200px;
-            padding: 15px;
-            background: rgba(0,0,0,0.9);
-            border: 2px solid;
-            border-radius: 10px;
-            opacity: 0;
-            transition: all 0.5s;
-            z-index: 70;
-            backdrop-filter: blur(10px);
-        }
-
-        .process-box.show {
-            opacity: 1;
-        }
-
-        .decrypt-box {
-            border-color: #ff0000;
-            box-shadow: 0 0 20px rgba(255,0,0,0.5);
-        }
-
-        .connection-line {
-            position: absolute;
-            height: 4px;
-            opacity: 0;
-            z-index: 10;
-            transition: all 1s;
-            transform-origin: 0 50%;
-        }
-
-        .connection-line.show {
-            opacity: 1;
-        }
-
-        .secure-line {
-            background: linear-gradient(90deg, transparent, #00ff00, transparent);
-            box-shadow: 0 0 10px #00ff00;
-        }
-
-        .fake-line {
-            background: linear-gradient(90deg, transparent, #ff0000, transparent);
-            box-shadow: 0 0 10px #ff0000;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 30px rgba(255,255,255,0.3); }
-            50% { box-shadow: 0 0 60px rgba(255,255,255,0.8); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-            25% { transform: translate(-52%, -50%) rotate(-5deg); }
-            75% { transform: translate(-48%, -50%) rotate(5deg); }
-        }
-
-        .warning-sign {
-            position: absolute;
-            font-size: 100px;
-            opacity: 0;
-            z-index: 95;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.5s;
-        }
-
-        .warning-sign.show {
-            opacity: 1;
-            animation: pulse 1s infinite;
-        }
-
-        .description {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 10px;
-            text-align: center;
-            min-height: 60px;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .shield {
-            position: absolute;
-            top: -25px;
-            right: -25px;
-            font-size: 40px;
-            opacity: 0;
-            transition: all 0.5s;
-            transform: rotate(0deg);
-        }
-
-        .shield.show {
-            opacity: 1;
-            transform: rotate(360deg);
-        }
-
-        .detail-box {
-            position: absolute;
-            background: rgba(0,0,0,0.9);
-            border: 2px solid #00ffff;
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 11px;
-            color: white;
-            z-index: 80;
-            line-height: 1.4;
-            max-width: 250px;
-            transition: opacity 0.5s;
-        }
-
-        .detail-box strong {
-            color: #00ffff;
-        }
-    </style>
+    <title>TLS/SSL Security Explained</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile-responsive.css">
 </head>
 <body>
     <div class="container">
-        <a href="../index.html" class="back-link">← Back to iOS Security Resources</a>
-        <h1>🔐 SSL/TLS Security Visualized</h1>
+        <h1>🔐 TLS/SSL Security Explained</h1>
 
-        <!-- Normal SSL -->
+        <!-- Simplified TLS Explanation -->
         <div class="demo-section">
-            <h2>1. Normal SSL/TLS Connection</h2>
+            <h2>1. How Secure Connections Work</h2>
             <div class="controls">
-                <button id="ssl-play">▶️ Play Animation</button>
-                <button id="ssl-step">⏭️ Next Step</button>
-                <button id="ssl-reset">🔄 Reset</button>
+                <button id="tls-simple-play">▶️ Play Animation</button>
+                <button id="tls-simple-step">⏭️ Next Step</button>
+                <button id="tls-simple-reset">🔄 Reset</button>
             </div>
 
-            <div class="stage" id="ssl-stage">
-                <div class="step-indicator" id="ssl-status">
-                    Click Play to watch the SSL handshake process
+            <div class="stage" id="tls-simple-stage">
+                <div class="step-indicator" id="tls-simple-status">
+                    Simple explanation of how TLS keeps your data safe
                 </div>
 
                 <div class="entity client">
                     <div class="entity-icon">📱</div>
                     <div class="entity-label">iOS App</div>
+                    <div class="key-pair-visual" id="simple-client-cert" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ff88;">Has Received:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>SERVER CERT</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="entity server">
-                    <div class="entity-icon">🏦</div>
+                    <div class="entity-icon">🖥️</div>
                     <div class="entity-label">Server</div>
-                    <div class="key-pair-visual" id="server-keys" style="display:none;">
-                        <div style="color: #00ffff; font-size: 10px; margin-top: 5px;">Certificate Pair:</div>
-                        <div style="display: flex; gap: 5px; margin-top: 3px;">
-                            <div style="background: #00ff00; color: #000; padding: 2px 5px; border-radius: 3px; font-size: 9px;">Public Cert</div>
-                            <div style="background: #ff00ff; color: #fff; padding: 2px 5px; border-radius: 3px; font-size: 9px;">Private Key</div>
+                    <div class="key-pair-visual" id="simple-server-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ffff;">Server Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>PUBLIC CERT</span>
+                            </div>
+                            <div class="key-item real-private-key">
+                                <span class="icon">🔑</span>
+                                <span>PRIVATE KEY</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -432,7 +64,7 @@
             </div>
 
             <div class="description">
-                Watch how SSL creates a secure connection through certificate verification and key exchange
+                Watch how your app creates a secure connection with a server
             </div>
         </div>
 
@@ -450,47 +82,65 @@
                     See how attackers intercept "secure" connections
                 </div>
 
-                <div class="entity client">
+                <div class="entity client" id="mitm-client">
                     <div class="entity-icon">📱</div>
-                    <div class="entity-label">Your App</div>
-                    <div class="code-display" id="client-thinks" style="display:none;">Thinks: Bank</div>
+                    <div class="entity-label">iOS App</div>
+                    <div class="key-pair-visual" id="mitm-client-cert" style="display:none;">
+                        <div class="key-pair-label" style="color: #ff9999;">Received From Attacker:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item fake-public-cert">
+                                <span class="icon">📜</span>
+                                <span>FAKE CERT</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="entity attacker" id="mitm-attacker">
                     <div class="entity-icon">👹</div>
                     <div class="entity-label">ATTACKER</div>
                     <div class="key-pair-visual" id="attacker-keys" style="display:none;">
-                        <div style="color: #ff0000; font-size: 10px; margin-top: 5px;">Has Own Pair:</div>
-                        <div style="display: flex; gap: 5px; margin-top: 3px;">
-                            <div style="background: #ff6b6b; color: #fff; padding: 2px 5px; border-radius: 3px; font-size: 9px;">Fake Public</div>
-                            <div style="background: #ff00ff; color: #fff; padding: 2px 5px; border-radius: 3px; font-size: 9px;">Fake Private</div>
+                        <div class="key-pair-label" style="color: #ff6666;">Attacker Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item fake-public-cert">
+                                <span class="icon">📜</span>
+                                <span>FAKE CERT</span>
+                            </div>
+                            <div class="key-item fake-private-key">
+                                <span class="icon">🔑</span>
+                                <span>FAKE PRIVATE</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="entity server">
-                    <div class="entity-icon">🏦</div>
+                <div class="entity server" id="mitm-server">
+                    <div class="entity-icon">🖥️</div>
                     <div class="entity-label">Server</div>
-                    <div class="code-display" id="server-thinks" style="display:none;">Thinks: Client</div>
+                    <div class="key-pair-visual" id="mitm-server-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ffff;">Server Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>REAL CERT</span>
+                            </div>
+                            <div class="key-item real-private-key">
+                                <span class="icon">🔑</span>
+                                <span>REAL PRIVATE</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="process-box decrypt-box" id="decrypt-box">
-                    <strong>🔓 DECRYPTING</strong><br>
-                    Using attacker's private key<br>
-                    <span id="decrypt-text" style="color: #ff0000; font-size: 14px;"></span>
-                </div>
-
-                <div class="warning-sign" id="mitm-warning">⚠️</div>
             </div>
 
             <div class="description">
-                The attacker has TWO certificates: a fake one for you, the real one with the bank
+                The attacker has TWO certificates: a fake one for you, the real one with the server
             </div>
         </div>
 
-        <!-- SSL Pinning -->
+        <!-- Certificate Pinning -->
         <div class="demo-section">
-            <h2>3. SSL Pinning Protection</h2>
+            <h2>3. Certificate Pinning Protection</h2>
             <div class="controls">
                 <button id="pin-play">▶️ Play Protection</button>
                 <button id="pin-step">⏭️ Next Step</button>
@@ -506,1073 +156,173 @@
                     <div class="entity-icon">📱</div>
                     <div class="entity-label">iOS App</div>
                     <div class="shield" id="pin-shield">🛡️</div>
+                    <div class="key-pair-visual" id="pin-client-pinned" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ff88;">📌 Pinned:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>REAL CERT</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="entity attacker" id="pin-attacker">
                     <div class="entity-icon">👹</div>
                     <div class="entity-label">ATTACKER</div>
+                    <div class="key-pair-visual" id="pin-attacker-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #ff6666;">Attacker Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item fake-public-cert">
+                                <span class="icon">📜</span>
+                                <span>FAKE CERT</span>
+                            </div>
+                            <div class="key-item fake-private-key">
+                                <span class="icon">🔑</span>
+                                <span>FAKE PRIVATE</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="entity server">
-                    <div class="entity-icon">🏦</div>
+                <div class="entity server" id="pin-server">
+                    <div class="entity-icon">🖥️</div>
                     <div class="entity-label">Server</div>
+                    <div class="key-pair-visual" id="pin-server-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ffff;">Server Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>REAL CERT</span>
+                            </div>
+                            <div class="key-item real-private-key">
+                                <span class="icon">🔑</span>
+                                <span>REAL PRIVATE</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="fingerprint" id="pinned-cert">
-                    📌 PINNED in App Code:<br>
-                    SHA256: AAAA1234567890...<br>
-                    (Bank's real certificate)
-                </div>
-
-                <div class="fingerprint" id="fake-cert">
-                    ❌ Attacker's Certificate:<br>
-                    SHA256: XXXX9999888777...<br>
-                    (Different fingerprint!)
-                </div>
-
-                <div class="fingerprint" id="real-cert">
-                    ✅ Bank's Certificate:<br>
-                    SHA256: AAAA1234567890...<br>
-                    (Matches pinned!)
-                </div>
-
-                <div class="comparison" id="comparison-box">
-                    <h3 style="color: #ffff00; margin-bottom: 10px;">Comparing Certificates:</h3>
-                    <div style="color: #ff0000;">Received: XXXX9999...</div>
-                    <div style="color: #00ff00;">Expected: AAAA1234...</div>
-                    <div style="font-size: 24px; margin-top: 10px;">❌ MISMATCH!</div>
-                </div>
-
-                <div class="warning-sign" id="pin-block">🚫</div>
             </div>
 
             <div class="description">
-                The app has the bank's certificate fingerprint hardcoded and rejects anything else
+                The app has the server's certificate fingerprint hardcoded and rejects anything else
+            </div>
+        </div>
+
+        <hr style="margin: 40px 0; border: 1px solid rgba(255,255,255,0.1);">
+        <h2 style="text-align: center; color: #00ffff; margin-bottom: 30px;">🎓 Advanced: Protocol Details</h2>
+
+        <!-- TLS 1.3 Handshake -->
+        <div class="demo-section">
+            <h3>TLS 1.3 Modern Handshake (1-RTT)</h3>
+            <div class="controls">
+                <button id="tls13-play">▶️ Play Animation</button>
+                <button id="tls13-step">⏭️ Next Step</button>
+                <button id="tls13-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="tls13-stage">
+                <div class="step-indicator" id="tls13-status">
+                    TLS 1.3 - Modern, fast, and secure handshake
+                </div>
+
+                <div class="entity client">
+                    <div class="entity-icon">📱</div>
+                    <div class="entity-label">iOS App</div>
+                </div>
+
+                <div class="entity server">
+                    <div class="entity-icon">🖥️</div>
+                    <div class="entity-label">Server</div>
+                </div>
+
+                <div class="entity ca">
+                    <div class="entity-icon">🏛️</div>
+                    <div class="entity-label">iOS Trusted<br>CAs</div>
+                </div>
+            </div>
+
+            <div class="description">
+                TLS 1.3: 1-RTT handshake, forward secrecy only, encrypted certificates, 0-RTT resumption
+            </div>
+        </div>
+
+        <!-- TLS 1.2 Handshake -->
+        <div class="demo-section">
+            <h3>TLS 1.2 Classic Handshake (2-RTT)</h3>
+            <div class="controls">
+                <button id="tls12-play">▶️ Play Animation</button>
+                <button id="tls12-step">⏭️ Next Step</button>
+                <button id="tls12-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="tls12-stage">
+                <div class="step-indicator" id="tls12-status">
+                    TLS 1.2 - Complete handshake process with all details
+                </div>
+
+                <div class="entity client">
+                    <div class="entity-icon">📱</div>
+                    <div class="entity-label">iOS App</div>
+                    <div class="key-pair-visual" id="tls12-client-cert" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ff88;">Has Received:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>SERVER CERT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="entity server">
+                    <div class="entity-icon">🖥️</div>
+                    <div class="entity-label">Server</div>
+                    <div class="key-pair-visual" id="tls12-server-keys" style="display:none;">
+                        <div class="key-pair-label" style="color: #00ffff;">Server Keys:</div>
+                        <div class="key-pair-items">
+                            <div class="key-item real-public-cert">
+                                <span class="icon">📜</span>
+                                <span>PUBLIC CERT</span>
+                            </div>
+                            <div class="key-item real-private-key">
+                                <span class="icon">🔑</span>
+                                <span>PRIVATE KEY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="entity ca">
+                    <div class="entity-icon">🏛️</div>
+                    <div class="entity-label">iOS Trusted<br>CAs</div>
+                </div>
+            </div>
+
+            <div class="description">
+                TLS 1.2: 2-RTT handshake, RSA or ECDHE key exchange, multiple cipher suites
             </div>
         </div>
     </div>
 
+    <!-- Core animation framework -->
+    <script src="shared.js"></script>
+    <script src="declarative-animation.js"></script>
+
+    <!-- Animation implementations -->
+    <script src="tls-simplified-declarative.js"></script>
+    <script src="mitm-declarative.js"></script>
+    <script src="pinning-declarative.js"></script>
+    <script src="tls13-handshake-declarative.js"></script>
+    <script src="tls12-handshake-declarative.js"></script>
+
     <script>
-        // Dimension constants
-        const ENTITY_HEIGHT = 120;
-        const ENTITY_WIDTH = 140;
-        const PACKET_WIDTH = 120;
-        const PACKET_HEIGHT = 30;
-        const DETAIL_BOX_OFFSET = 10; // Gap between entity and detail box
-
-        // Helper functions
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        function setPosition(element, x, y) {
-            element.style.left = `${x}px`;
-            element.style.top = `${y}px`;
-        }
-
-        function getElementCenter(element) {
-            const rect = element.getBoundingClientRect();
-            const stageRect = element.closest('.stage').getBoundingClientRect();
-            return {
-                x: rect.left - stageRect.left + rect.width / 2,
-                y: rect.top - stageRect.top + rect.height / 2
-            };
-        }
-
-        function createConnectionLine(stage, fromElement, toElement, className = 'secure-line') {
-            const from = getElementCenter(fromElement);
-            const to = getElementCenter(toElement);
-
-            const line = document.createElement('div');
-            line.className = `connection-line ${className}`;
-
-            const distance = Math.sqrt(Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2));
-            const angle = Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI;
-
-            line.style.width = `${distance}px`;
-            line.style.left = `${from.x}px`;
-            line.style.top = `${from.y}px`;
-            line.style.transform = `rotate(${angle}deg)`;
-            line.style.transformOrigin = '0 50%';
-
-            stage.appendChild(line);
-            return line;
-        }
-
-        async function createAndMovePacket(stage, text, className, startX, startY, endX, endY, duration = 1500) {
-            const packet = document.createElement('div');
-            packet.className = `packet ${className}`;
-            packet.textContent = text;
-            setPosition(packet, startX, startY);
-            stage.appendChild(packet);
-
-            await sleep(100);
-            packet.classList.add('show');
-
-            await sleep(300);
-            packet.classList.add('moving');
-            setPosition(packet, endX, endY);
-
-            await sleep(duration);
-            return packet;
-        }
-
-        async function createAndMovePacketBetweenElements(stage, text, className, fromElement, toElement, duration = 1500) {
-            const from = getElementCenter(fromElement);
-            const to = getElementCenter(toElement);
-            const fromRect = fromElement.getBoundingClientRect();
-            const toRect = toElement.getBoundingClientRect();
-            const stageRect = stage.getBoundingClientRect();
-
-            // Calculate if moving left to right or right to left
-            const movingRight = from.x < to.x;
-
-            // Adjust end position to stop at edge of target element, not center
-            const packetWidth = PACKET_WIDTH;
-            const packetHeight = PACKET_HEIGHT;
-            const startX = from.x - packetWidth/2;
-            const startY = from.y - packetHeight/2;
-
-            // Stop packet at the edge of the target element
-            let endX;
-            if (movingRight) {
-                // Moving right: stop at left edge of target
-                endX = (toRect.left - stageRect.left) - packetWidth - 10;
-            } else {
-                // Moving left: stop at right edge of target
-                endX = (toRect.right - stageRect.left);
-            }
-            const endY = to.y - packetHeight/2;
-
-            return createAndMovePacket(stage, text, className, startX, startY, endX, endY, duration);
-        }
-
-        // Animation state tracking
-        let sslCurrentStep = 0;
-        let mitmCurrentStep = 0;
-        let pinCurrentStep = 0;
-        let sslAnimationState = {};
-        let mitmAnimationState = {};
-        let pinAnimationState = {};
-        let isSteppingMode = false;
-
-        // SSL Animation
-        async function playSSLStep(step, skipWaits = false) {
-            const stage = document.getElementById('ssl-stage');
-            const status = document.getElementById('ssl-status');
-            const clientEl = stage.querySelector('.client');
-            const serverEl = stage.querySelector('.server');
-            const caEl = stage.querySelector('.ca');
-
-            // Clean up old step elements if needed
-            if (step === 0) {
-                stage.querySelectorAll('.packet, .connection-line, .detail-box').forEach(el => el.remove());
-                document.getElementById('server-keys').style.display = 'none';
-            }
-
-            switch(step) {
-                case 0:
-                    // Step 0: Show certificate pair concept
-                    status.innerHTML = '<strong>SETUP: CERTIFICATE PAIRS</strong> - Server has a PUBLIC certificate + PRIVATE key pair';
-
-            document.getElementById('server-keys').style.display = 'block';
-
-            const pairExplain = document.createElement('div');
-            pairExplain.className = 'detail-box';
-            pairExplain.style.border = '2px solid #ffff00';
-            pairExplain.innerHTML = `
-                <strong style="color: #ffff00">🔑 Key Pair Concept:</strong><br>
-                <br>
-                <span style="color: #00ff00">PUBLIC Certificate:</span><br>
-                • Can be shared with everyone<br>
-                • Contains public key<br>
-                • Used to encrypt TO server<br>
-                <br>
-                <span style="color: #ff00ff">PRIVATE Key:</span><br>
-                • NEVER shared, kept secret!<br>
-                • Used to decrypt messages<br>
-                • Only server has this
-            `;
-
-            // Calculate position based on server element
-            const serverPos = getElementCenter(serverEl);
-            pairExplain.style.right = '50px';
-            pairExplain.style.top = `${serverPos.y + ENTITY_HEIGHT/2 + DETAIL_BOX_OFFSET}px`;
-            stage.appendChild(pairExplain);
-
-            if (!isSteppingMode) {
-                await sleep(3000);
-                pairExplain.style.opacity = '0';
-            }
-            // In step mode, just don't fade - will be removed on next step
-            break;
-
-                case 1:
-                    // Step 1: Client Hello
-            status.innerHTML = '<strong>Step 1: CLIENT HELLO</strong> - Client lists which encryption algorithms it supports';
-
-            const helloDetail = document.createElement('div');
-            helloDetail.className = 'detail-box';
-            helloDetail.innerHTML = `
-                <strong>Client Hello Contains:</strong><br>
-                • TLS Version: 1.3<br>
-                • Random: 7B3F2A9E... (32 bytes)<br>
-                • Cipher Suites:<br>
-                &nbsp;&nbsp;- TLS_AES_256_GCM_SHA384<br>
-                &nbsp;&nbsp;- TLS_AES_128_GCM_SHA256<br>
-                &nbsp;&nbsp;- TLS_CHACHA20_POLY1305<br>
-                • Server Name: chase.com
-            `;
-            const clientPos = getElementCenter(clientEl);
-            helloDetail.style.left = '50px';
-            helloDetail.style.top = `${clientPos.y + ENTITY_HEIGHT/2 + DETAIL_BOX_OFFSET}px`;
-            stage.appendChild(helloDetail);
-
-            const hello = await createAndMovePacketBetweenElements(
-                stage,
-                'CLIENT HELLO →',
-                'packet-plain',
-                clientEl,
-                serverEl,
-                1500
-            );
-
-            hello.textContent = '📥 Processing...';
-            hello.style.background = 'linear-gradient(135deg, #00ff00, #00cc00)';
-            await sleep(1000);
-            if (!isSteppingMode) {
-                hello.style.opacity = '0';
-                helloDetail.style.opacity = '0';
-            }
-            // Store for cleanup in next step
-            sslAnimationState.hello = hello;
-            sslAnimationState.helloDetail = helloDetail;
-            break;
-
-                case 2:
-                    // Step 2: Server sends PUBLIC certificate
-            status.innerHTML = '<strong>Step 2: SERVER SENDS PUBLIC CERTIFICATE</strong> - Keeps private key SECRET!';
-
-            // Hide previous step elements
-            if (sslAnimationState.hello) {
-                sslAnimationState.hello.style.opacity = '0';
-            }
-            if (sslAnimationState.helloDetail) {
-                sslAnimationState.helloDetail.style.opacity = '0';
-            }
-
-            const certDetail = document.createElement('div');
-            certDetail.className = 'detail-box';
-            certDetail.style.background = 'rgba(0,255,0,0.2)';
-            certDetail.style.border = '2px solid #00ff00';
-            certDetail.innerHTML = `
-                <strong style="color: #00ff00">📜 PUBLIC Certificate:</strong><br>
-                • Domain: chase.com<br>
-                • Issuer: DigiCert CA<br>
-                • Valid: 2024-2026<br>
-                • Contains PUBLIC KEY: RSA-2048<br>
-                • Fingerprint: SHA256:AAAA1234...<br>
-                <br>
-                <strong style="color: #ff00ff">🔒 Private Key:</strong><br>
-                STAYS ON SERVER - Never sent!
-            `;
-            const serverPosForCert = getElementCenter(serverEl);
-            certDetail.style.right = '50px';
-            certDetail.style.top = `${serverPosForCert.y + ENTITY_HEIGHT/2 + DETAIL_BOX_OFFSET}px`;
-            stage.appendChild(certDetail);
-
-            const cert = await createAndMovePacketBetweenElements(
-                stage,
-                '← PUBLIC CERT',
-                'packet-cert',
-                serverEl,
-                clientEl,
-                1500
-            );
-
-            if (!isSteppingMode) {
-                await sleep(1500);
-            }
-            // Store certDetail in animation state for later cleanup
-            sslAnimationState.certDetail = certDetail;
-            sslAnimationState.cert = cert;
-            break;
-
-                case 3:
-                    // Step 3: iOS internal CA verification
-            status.innerHTML = '<strong>Step 3: iOS VALIDATES CERTIFICATE INTERNALLY</strong> - iOS checks certificate against built-in trusted CAs';
-            // Always hide previous step elements when moving to new step
-            if (sslAnimationState.certDetail) {
-                sslAnimationState.certDetail.style.opacity = '0';
-            }
-            if (sslAnimationState.cert) {
-                sslAnimationState.cert.style.opacity = '0';
-            }
-
-            // Show iOS internal validation
-            const iosValidation = document.createElement('div');
-            iosValidation.className = 'detail-box';
-            iosValidation.style.border = '2px solid #00ffff';
-            iosValidation.innerHTML = `
-                <strong style="color: #00ffff">📱 iOS Internal Validation:</strong><br>
-                <br>
-                1. iOS receives PUBLIC certificate<br>
-                2. Checks signature with built-in CAs<br>
-                3. iOS has trusted root CAs installed<br>
-                4. Validates: DigiCert → Trusted ✓<br>
-                <br>
-                <span style="color: #ffff00">All happens INSIDE the device!</span>
-            `;
-            const clientPosForValidation = getElementCenter(clientEl);
-            iosValidation.style.left = '50px';
-            iosValidation.style.top = `${clientPosForValidation.y + ENTITY_HEIGHT/2 + DETAIL_BOX_OFFSET}px`;
-            stage.appendChild(iosValidation);
-
-            // Visual indicator showing internal check
-            clientEl.style.boxShadow = '0 0 40px rgba(0,255,255,0.8)';
-            clientEl.style.animation = 'pulse 1s';
-
-            // Show connection to CA as dotted line to indicate internal check
-            const internalLine = createConnectionLine(stage, clientEl, caEl, 'secure-line');
-            internalLine.style.borderStyle = 'dashed';
-            internalLine.style.opacity = '0.5';
-            internalLine.classList.add('show');
-
-            await sleep(1500);
-
-            const checkmark = document.createElement('div');
-            checkmark.style.position = 'absolute';
-            checkmark.style.fontSize = '48px';
-            checkmark.style.left = '100px';
-            checkmark.style.top = '180px';
-            checkmark.textContent = '✅';
-            checkmark.style.zIndex = '100';
-            stage.appendChild(checkmark);
-
-            await sleep(1500);
-            if (!isSteppingMode) {
-                iosValidation.style.opacity = '0';
-                internalLine.style.opacity = '0';
-                checkmark.style.opacity = '0';
-                clientEl.style.animation = '';
-            }
-            // In step mode, elements stay visible
-            break;
-
-                case 4:
-                    // Step 4: Key Exchange
-            status.innerHTML = '<strong>Step 4: ENCRYPT WITH PUBLIC KEY</strong> - Use public key FROM the certificate';
-            // Always hide previous packets when starting new step
-            stage.querySelectorAll('.packet').forEach(p => p.style.opacity = '0');
-
-            const keyDetail = document.createElement('div');
-            keyDetail.className = 'detail-box';
-            keyDetail.innerHTML = `
-                <strong>Client uses PUBLIC KEY from cert:</strong><br>
-                Pre-Master Secret: ABC123XYZ<br>
-                <br>
-                <strong>Encrypt with server's PUBLIC key:</strong><br>
-                RSA_Encrypt(ABC123XYZ, PublicKey)<br>
-                ↓<br>
-                Result: x9Y#mK@pL3$...<br>
-                <br>
-                <span style="color: #ffff00">Only server's PRIVATE key can decrypt!</span>
-            `;
-            const centerY = getElementCenter(clientEl).y;
-            // Center the box horizontally in the stage
-            keyDetail.style.left = '50%';
-            keyDetail.style.transform = 'translateX(-50%)';
-            keyDetail.style.top = `${centerY + ENTITY_HEIGHT/2 + DETAIL_BOX_OFFSET}px`;
-            stage.appendChild(keyDetail);
-
-            const secret = await createAndMovePacketBetweenElements(
-                stage,
-                '🔐 Encrypted →',
-                'packet-encrypted',
-                clientEl,
-                serverEl,
-                1500
-            );
-
-            // Instead of moving the packet, create a new one at the right position
-            secret.style.opacity = '0';
-            const decrypted = document.createElement('div');
-            decrypted.className = 'packet packet-plain show';
-            decrypted.textContent = '🔓 Decrypted (w/ PRIVATE)';
-            const serverPosDecrypt = getElementCenter(serverEl);
-            decrypted.style.left = `${serverPosDecrypt.x - 200}px`;
-            decrypted.style.top = `${serverPosDecrypt.y - PACKET_HEIGHT/2}px`;
-            decrypted.style.position = 'absolute';
-            stage.appendChild(decrypted);
-            await sleep(1000);
-            if (!isSteppingMode) {
-                keyDetail.style.opacity = '0';
-                secret.style.opacity = '0';
-                decrypted.style.opacity = '0';
-            } else {
-                // Store for cleanup in next step
-                sslAnimationState.decrypted = decrypted;
-            }
-            // In step mode, elements stay visible
-            break;
-
-                case 5:
-                    // Step 5: Session Keys
-            status.innerHTML = '<strong>Step 5: SESSION KEYS</strong> - Both calculate same key from shared secrets';
-
-            // Hide previous step elements
-            if (sslAnimationState.decrypted) {
-                sslAnimationState.decrypted.style.opacity = '0';
-            }
-
-            const sessionDetail = document.createElement('div');
-            sessionDetail.className = 'detail-box';
-            sessionDetail.innerHTML = `
-                <strong>Both sides calculate:</strong><br>
-                Pre-Master: ABC123XYZ<br>
-                Client Random: 7B3F2A9E...<br>
-                Server Random: 9E4A1B8C...<br>
-                ↓<br>
-                <strong>Session Key: K7@mX9#...</strong><br>
-                <br>
-                Now using AES-256 (symmetric)
-            `;
-            const sessionY = getElementCenter(clientEl).y;
-            // Center the box horizontally in the stage
-            sessionDetail.style.left = '50%';
-            sessionDetail.style.transform = 'translateX(-50%)';
-            sessionDetail.style.top = `${sessionY + ENTITY_HEIGHT/2 + DETAIL_BOX_OFFSET}px`;
-            stage.appendChild(sessionDetail);
-
-            // Draw dynamic connection line
-            const line = createConnectionLine(stage, clientEl, serverEl, 'secure-line');
-            await sleep(100);
-            line.classList.add('show');
-
-            await sleep(1500);
-            if (!isSteppingMode) {
-                sessionDetail.style.opacity = '0';
-            }
-            // In step mode, elements stay visible
-
-            status.innerHTML = '✅ SECURE! Both parties now use symmetric AES-256 with session key';
-            break;
-            }
-
-            return true;
-        }
-
-        async function playSSL() {
-            const btn = document.getElementById('ssl-play');
-            btn.textContent = '⏸️ Playing...';
-            btn.classList.add('playing');
-            isSteppingMode = false;
-
-            sslCurrentStep = 0;
-            while (sslCurrentStep <= 5) {
-                await playSSLStep(sslCurrentStep);
-                sslCurrentStep++;
-                if (sslCurrentStep <= 5) await sleep(100);
-            }
-
-            btn.textContent = '▶️ Play Animation';
-            btn.classList.remove('playing');
-            sslCurrentStep = 0;
-        }
-
-        async function stepSSL() {
-            const stage = document.getElementById('ssl-stage');
-            const stepBtn = document.getElementById('ssl-step');
-            isSteppingMode = true;
-
-            // Disable button during animation
-            stepBtn.disabled = true;
-            const originalText = stepBtn.textContent;
-            stepBtn.textContent = '⏳ Running...';
-
-            if (sslCurrentStep === 0) {
-                // Full cleanup on restart
-                stage.querySelectorAll('.packet, .connection-line, .detail-box').forEach(el => el.remove());
-                document.getElementById('server-keys').style.display = 'none';
-                sslAnimationState = {};
-
-                // Reset client element animation/styles
-                const clientEl = stage.querySelector('.client');
-                if (clientEl) {
-                    clientEl.style.animation = '';
-                    clientEl.style.boxShadow = '';
-                }
-            } else {
-                // Clean up elements from previous step
-                stage.querySelectorAll('.detail-box').forEach(el => {
-                    if (el.style.opacity === '0' || el.style.opacity === '') {
-                        el.remove();
-                    }
-                });
-                stage.querySelectorAll('.packet').forEach(el => {
-                    if (el.style.opacity === '0') {
-                        el.remove();
-                    }
-                });
-            }
-
-            await playSSLStep(sslCurrentStep, true);
-            sslCurrentStep++;
-
-            if (sslCurrentStep > 5) {
-                // Disable Next Step button at the end
-                stepBtn.disabled = true;
-                stepBtn.textContent = '✅ Complete';
-                const status = document.getElementById('ssl-status');
-                status.innerHTML = '✅ Animation complete! Click "Reset" to start over.';
-                // Don't reset automatically
-            } else if (sslCurrentStep === 5) {
-                // Re-enable for final step
-                stepBtn.disabled = false;
-                stepBtn.textContent = '⏭️ Final Step';
-            } else {
-                // Re-enable for next step
-                stepBtn.disabled = false;
-                stepBtn.textContent = '⏭️ Next Step';
-            }
-        }
-
-        // MITM Attack Animation
-        async function playMITM() {
-            const stage = document.getElementById('mitm-stage');
-            const status = document.getElementById('mitm-status');
-            const btn = document.getElementById('mitm-play');
-            const clientEl = stage.querySelector('.client');
-            const serverEl = stage.querySelector('.server');
-            const attacker = document.getElementById('mitm-attacker');
-            const decryptBox = document.getElementById('decrypt-box');
-            const warning = document.getElementById('mitm-warning');
-
-            // Clean up
-            stage.querySelectorAll('.packet, .connection-line, .detail-box').forEach(el => el.remove());
-            attacker.classList.remove('show');
-            decryptBox.classList.remove('show');
-            warning.classList.remove('show');
-            document.getElementById('client-thinks').style.display = 'none';
-            document.getElementById('server-thinks').style.display = 'none';
-            document.getElementById('attacker-keys').style.display = 'none';
-
-            btn.textContent = '⏸️ Playing...';
-            btn.classList.add('playing');
-
-            // Step 1: Setup
-            status.innerHTML = '<strong>Step 1: COMPROMISED NETWORK</strong> - You connect to attacker-controlled WiFi';
-            await sleep(1000);
-
-            // Step 2: Attacker appears with their own pair
-            status.innerHTML = '<strong>Step 2: ATTACKER WITH OWN CERT PAIR</strong> - Has their own public/private key pair';
-            attacker.classList.add('show');
-            document.getElementById('attacker-keys').style.display = 'block';
-            attacker.style.animation = 'shake 0.5s';
-
-            const pairExplain = document.createElement('div');
-            pairExplain.className = 'detail-box';
-            pairExplain.style.border = '2px solid #ff0000';
-            pairExplain.innerHTML = `
-                <strong style="color: #ff0000">Attacker's Certificate Pair:</strong><br>
-                <br>
-                📜 <span style="color: #ff6b6b">Fake PUBLIC Certificate</span><br>
-                • Will send this to you<br>
-                • Contains attacker's public key<br>
-                <br>
-                🔒 <span style="color: #ff00ff">Attacker's PRIVATE Key</span><br>
-                • Can decrypt YOUR data<br>
-                • Because you'll use their public!
-            `;
-            pairExplain.style.left = '350px';
-            pairExplain.style.top = '50px';
-            stage.appendChild(pairExplain);
-
-            await sleep(2500);
-            pairExplain.style.opacity = '0';
-
-            // Step 3: Connection attempt
-            const attempt = await createAndMovePacketBetweenElements(
-                stage,
-                'CLIENT HELLO →',
-                'packet-plain',
-                clientEl,
-                attacker,
-                1000
-            );
-
-            attempt.textContent = '🔴 INTERCEPTED!';
-            attempt.className = 'packet packet-fake show';
-            await sleep(1000);
-
-            // Step 4: Two PUBLIC certificates
-            status.innerHTML = '<strong>Step 3: ATTACKER SENDS TWO DIFFERENT PUBLIC CERTS</strong>';
-            attempt.style.opacity = '0';
-
-            const certDetail = document.createElement('div');
-            certDetail.className = 'detail-box';
-            certDetail.style.border = '3px solid #ffff00';
-            certDetail.innerHTML = `
-                <strong style="color: #ffff00">The Deception:</strong><br>
-                <br>
-                <strong>To You:</strong><br>
-                Sends ATTACKER's PUBLIC cert<br>
-                • <span style="color: #ff0000">Contains attacker's public key</span><br>
-                <br>
-                <strong>From Bank:</strong><br>
-                Gets BANK's PUBLIC cert<br>
-                • <span style="color: #00ff00">Contains bank's public key</span><br>
-                <br>
-                = Two different encryption keys!
-            `;
-            certDetail.style.left = '350px';
-            certDetail.style.top = '100px';
-            stage.appendChild(certDetail);
-
-            // Fake PUBLIC cert to client
-            const fakeCert = await createAndMovePacketBetweenElements(
-                stage,
-                '← Fake Cert',
-                'packet-fake',
-                attacker,
-                clientEl,
-                1000
-            );
-
-            fakeCert.innerHTML = '⚠️ Unknown CA Warning<br><small>User clicks "Accept"</small>';
-            await sleep(1000);
-
-            // Gets real PUBLIC cert from bank
-            const realConn = await createAndMovePacketBetweenElements(
-                stage,
-                '← Bank Cert',
-                'packet-cert',
-                serverEl,
-                attacker,
-                1000
-            );
-
-            await sleep(500);
-            document.getElementById('client-thinks').style.display = 'block';
-            document.getElementById('server-thinks').style.display = 'block';
-
-            // Draw two dynamic connection lines
-            const line1 = createConnectionLine(stage, clientEl, attacker, 'fake-line');
-            const line2 = createConnectionLine(stage, attacker, serverEl, 'fake-line');
-
-            await sleep(100);
-            line1.classList.add('show');
-            line2.classList.add('show');
-
-            fakeCert.style.opacity = '0';
-            realConn.style.opacity = '0';
-            certDetail.style.opacity = '0';
-
-            // Step 5: Show WHY attacker can decrypt
-            status.innerHTML = '<strong>Step 4: THE CRITICAL FLAW</strong> - You encrypt with ATTACKER\'s public key!';
-            await sleep(1000);
-
-            const keyInsight = document.createElement('div');
-            keyInsight.className = 'detail-box';
-            keyInsight.style.background = 'rgba(255,0,0,0.9)';
-            keyInsight.style.border = '3px solid #ffff00';
-            keyInsight.innerHTML = `
-                <strong style="color: #ffff00">WHY ATTACKER CAN DECRYPT:</strong><br>
-                <br>
-                1. You got attacker's PUBLIC cert<br>
-                2. You encrypt with their PUBLIC key<br>
-                3. Attacker has matching PRIVATE key<br>
-                4. They decrypt YOUR data!<br>
-                <br>
-                Public/Private are a PAIR!
-            `;
-            keyInsight.style.left = '50px';
-            keyInsight.style.top = '100px';
-            stage.appendChild(keyInsight);
-
-            const password = await createAndMovePacketBetweenElements(
-                stage,
-                '🔒 Password →',
-                'packet-encrypted',
-                clientEl,
-                attacker,
-                1000
-            );
-
-            // Show decryption box
-            const attackerPos = getElementCenter(attacker);
-            decryptBox.style.left = `${attackerPos.x - 100}px`;
-            decryptBox.style.top = `${attackerPos.y + 60}px`;
-            decryptBox.classList.add('show');
-            decryptBox.innerHTML = `
-                <strong>🔓 DECRYPTING</strong><br>
-                Using: Attacker's PRIVATE key<br>
-                (Matches their PUBLIC cert)<br>
-                <span id="decrypt-text"></span>
-            `;
-
-            await sleep(1000);
-            document.getElementById('decrypt-text').innerHTML = '<br>Result: <span style="color: #ffff00">Password: MyS3cr3t!</span>';
-            password.textContent = '📖 Password: MyS3cr3t!';
-            password.className = 'packet packet-plain show';
-            password.style.background = 'linear-gradient(135deg, #ff6b6b, #ff4444)';
-
-            await sleep(2000);
-            keyInsight.style.opacity = '0';
-
-            // Re-encrypt with bank's PUBLIC
-            status.innerHTML = '<strong>Step 5: RE-ENCRYPT WITH BANK\'S PUBLIC</strong> - Uses bank\'s public key from real cert';
-            password.textContent = '🔒 Pass (w/ BANK public)';
-            password.className = 'packet packet-encrypted show';
-
-            // Move to bank
-            const serverPos = getElementCenter(serverEl);
-            password.style.left = `${serverPos.x - 50}px`;
-            password.style.top = `${serverPos.y - 15}px`;
-
-            await sleep(1500);
-
-            const attackSummary = document.createElement('div');
-            attackSummary.className = 'detail-box';
-            attackSummary.style.background = 'rgba(255,100,100,0.9)';
-            attackSummary.innerHTML = `
-                <strong>Complete Compromise:</strong><br>
-                • Passwords exposed<br>
-                • Credit cards visible<br>
-                • Can modify data<br>
-                • Can inject malware<br>
-                <br>
-                All because you used<br>
-                attacker's PUBLIC certificate!
-            `;
-            attackSummary.style.right = '50px';
-            attackSummary.style.top = '100px';
-            stage.appendChild(attackSummary);
-
-            // Warning
-            warning.classList.add('show');
-            status.innerHTML = '⚠️ TOTAL BREACH! Attacker\'s cert pair lets them decrypt everything!';
-
-            btn.textContent = '▶️ Play Attack';
-            btn.classList.remove('playing');
-        }
-
-        // SSL Pinning Animation
-        async function playPinning() {
-            const stage = document.getElementById('pin-stage');
-            const status = document.getElementById('pin-status');
-            const btn = document.getElementById('pin-play');
-            const clientEl = stage.querySelector('.client');
-            const serverEl = stage.querySelector('.server');
-            const attacker = document.getElementById('pin-attacker');
-            const shield = document.getElementById('pin-shield');
-            const pinnedCert = document.getElementById('pinned-cert');
-            const fakeCert = document.getElementById('fake-cert');
-            const realCert = document.getElementById('real-cert');
-            const comparison = document.getElementById('comparison-box');
-            const block = document.getElementById('pin-block');
-
-            // Clean up
-            stage.querySelectorAll('.packet, .connection-line, .detail-box').forEach(el => el.remove());
-            attacker.classList.remove('show');
-            shield.classList.remove('show');
-            pinnedCert.classList.remove('show');
-            fakeCert.classList.remove('show');
-            realCert.classList.remove('show');
-            comparison.classList.remove('show');
-            block.classList.remove('show');
-
-            btn.textContent = '⏸️ Playing...';
-            btn.classList.add('playing');
-
-            // Step 1: Explain certificate pinning concept
-            status.innerHTML = '<strong>Step 1: PINNING THE PUBLIC CERTIFICATE</strong> - App stores bank\'s PUBLIC certificate';
-            shield.classList.add('show');
-            await sleep(500);
-
-            const pinDetail = document.createElement('div');
-            pinDetail.className = 'detail-box';
-            pinDetail.style.border = '3px solid #00ffff';
-            pinDetail.innerHTML = `
-                <strong style="color: #00ffff">📌 What We Pin:</strong><br>
-                <br>
-                We pin the <span style="color: #00ff00">PUBLIC certificate</span><br>
-                (or its SHA256 fingerprint)<br>
-                <br>
-                <strong>iOS App Code:</strong><br>
-                <code style="color: #00ff00">
-                // Store PUBLIC cert hash<br>
-                let pinnedPublicCerts = [<br>
-                &nbsp;&nbsp;"chase.com": {<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;publicCertHash: "AAAA1234..."<br>
-                &nbsp;&nbsp;}<br>
-                ]<br>
-                </code>
-                <br>
-                Note: We NEVER store private keys!
-            `;
-            pinDetail.style.left = '50px';
-            pinDetail.style.top = '320px';
-            stage.appendChild(pinDetail);
-
-            const bankPair = document.createElement('div');
-            bankPair.className = 'detail-box';
-            bankPair.style.border = '2px solid #00ff00';
-            bankPair.innerHTML = `
-                <strong style="color: #00ff00">Bank's Certificate Pair:</strong><br>
-                <br>
-                📜 <span style="color: #00ff00">PUBLIC Certificate</span><br>
-                • Sent to clients<br>
-                • SHA256: AAAA1234...<br>
-                • We pin THIS ↑<br>
-                <br>
-                🔒 <span style="color: #ff00ff">PRIVATE Key</span><br>
-                • Never leaves server<br>
-                • Kept secret
-            `;
-            bankPair.style.right = '50px';
-            bankPair.style.top = '50px';
-            stage.appendChild(bankPair);
-
-            pinnedCert.style.left = '50px';
-            pinnedCert.style.bottom = '20px';
-            pinnedCert.innerHTML = `
-                📌 PINNED PUBLIC CERT:<br>
-                Domain: chase.com<br>
-                Issuer: DigiCert CA<br>
-                SHA256: AAAA1234567890...
-            `;
-            pinnedCert.classList.add('show');
-            await sleep(3000);
-            pinDetail.style.opacity = '0';
-            bankPair.style.opacity = '0';
-
-            // Step 2: Attacker's certificate pair
-            status.innerHTML = '<strong>Step 2: ATTACKER HAS DIFFERENT PAIR</strong> - Different public cert, different private key';
-            attacker.classList.add('show');
-            await sleep(500);
-
-            const attackerPair = document.createElement('div');
-            attackerPair.className = 'detail-box';
-            attackerPair.style.border = '2px solid #ff0000';
-            attackerPair.innerHTML = `
-                <strong style="color: #ff0000">Attacker's Cert Pair:</strong><br>
-                <br>
-                📜 <span style="color: #ff6b6b">Fake PUBLIC Cert</span><br>
-                • Different issuer<br>
-                • SHA256: XXXX9999...<br>
-                • Won't match pin! ↑<br>
-                <br>
-                🔒 <span style="color: #ff00ff">Attacker's PRIVATE Key</span><br>
-                • Can only decrypt their cert<br>
-                • Useless if cert rejected!
-            `;
-            attackerPair.style.left = '400px';
-            attackerPair.style.top = '100px';
-            stage.appendChild(attackerPair);
-
-            fakeCert.style.left = '400px';
-            fakeCert.style.top = '350px';
-            fakeCert.innerHTML = `
-                ❌ ATTACKER'S PUBLIC CERT:<br>
-                Domain: chase.com (fake!)<br>
-                Issuer: BadGuy CA<br>
-                SHA256: XXXX9999888777...
-            `;
-            fakeCert.classList.add('show');
-
-            await sleep(2500);
-            attackerPair.style.opacity = '0';
-
-            // Step 3: Send fake PUBLIC certificate
-            status.innerHTML = '<strong>Step 3: ATTACKER SENDS THEIR PUBLIC CERT</strong> - App will check the fingerprint';
-
-            const fakePacket = await createAndMovePacketBetweenElements(
-                stage,
-                '← Fake Cert',
-                'packet-fake',
-                attacker,
-                clientEl,
-                1000
-            );
-
-            // Step 4: Comparison
-            status.innerHTML = '<strong>Step 4: COMPARING PUBLIC CERTIFICATES</strong> - Fingerprints must match exactly';
-            await sleep(500);
-
-            comparison.innerHTML = `
-                <h3 style="color: #ffff00; margin-bottom: 10px;">Public Certificate Check:</h3>
-                <div style="color: #ff0000;">
-                    Received PUBLIC Cert:<br>
-                    &nbsp;&nbsp;Issuer: BadGuy CA ❌<br>
-                    &nbsp;&nbsp;SHA256: XXXX9999... ❌
-                </div>
-                <div style="color: #00ff00; margin-top: 10px;">
-                    Pinned PUBLIC Cert:<br>
-                    &nbsp;&nbsp;Issuer: DigiCert CA ✓<br>
-                    &nbsp;&nbsp;SHA256: AAAA1234... ✓
-                </div>
-                <div style="font-size: 24px; margin-top: 15px; color: #ff0000;">
-                    ❌ PUBLIC CERTS DON'T MATCH!
-                </div>
-            `;
-            comparison.classList.add('show');
-            await sleep(3000);
-
-            // Step 5: Rejection
-            status.innerHTML = '<strong>Step 5: CONNECTION BLOCKED</strong> - Wrong public certificate = no connection';
-            comparison.classList.remove('show');
-            fakePacket.textContent = '🚫 BLOCKED!';
-            fakePacket.style.background = 'linear-gradient(135deg, #ff0000, #cc0000)';
-
-            block.classList.add('show');
-            await sleep(1000);
-
-            const uselessKey = document.createElement('div');
-            uselessKey.className = 'detail-box';
-            uselessKey.style.background = 'rgba(255,0,0,0.9)';
-            uselessKey.style.border = '2px solid #ff0000';
-            uselessKey.innerHTML = `
-                <strong>Attacker's Problem:</strong><br>
-                <br>
-                Their PRIVATE key is useless!<br>
-                Connection blocked before<br>
-                any encryption happens.<br>
-                <br>
-                Can't use different PUBLIC cert!
-            `;
-            uselessKey.style.left = '350px';
-            uselessKey.style.top = '150px';
-            stage.appendChild(uselessKey);
-
-            attacker.style.opacity = '0.2';
-            fakeCert.style.opacity = '0.2';
-            fakePacket.style.opacity = '0';
-            await sleep(2500);
-
-            uselessKey.style.opacity = '0';
-
-            // Step 6: Show real PUBLIC certificate works
-            status.innerHTML = '<strong>Step 6: REAL PUBLIC CERTIFICATE</strong> - Matches the pinned public cert perfectly';
-            block.classList.remove('show');
-
-            realCert.style.right = '50px';
-            realCert.style.bottom = '20px';
-            realCert.innerHTML = `
-                ✅ BANK'S PUBLIC CERT:<br>
-                Domain: chase.com<br>
-                Issuer: DigiCert CA ✓<br>
-                SHA256: AAAA1234567890... ✓
-            `;
-            realCert.classList.add('show');
-
-            const realPair = document.createElement('div');
-            realPair.className = 'detail-box';
-            realPair.style.border = '3px solid #00ff00';
-            realPair.innerHTML = `
-                <strong style="color: #00ff00">Perfect Match!</strong><br>
-                <br>
-                Bank sends PUBLIC cert<br>
-                ↓<br>
-                App checks: AAAA1234...<br>
-                ↓<br>
-                Matches pinned: AAAA1234...<br>
-                ↓<br>
-                ✅ Connection allowed!
-            `;
-            realPair.style.right = '50px';
-            realPair.style.top = '100px';
-            stage.appendChild(realPair);
-
-            await sleep(1000);
-
-            const realPacket = await createAndMovePacketBetweenElements(
-                stage,
-                '← Real Cert',
-                'packet-cert',
-                serverEl,
-                clientEl,
-                1000
-            );
-
-            realPacket.textContent = '✅ PERFECT MATCH!';
-            realPacket.style.background = 'linear-gradient(135deg, #00ff00, #00cc00)';
-
-            await sleep(1500);
-
-            // Dynamic secure connection line
-            const line = createConnectionLine(stage, clientEl, serverEl, 'secure-line');
-            await sleep(100);
-            line.classList.add('show');
-
-            status.innerHTML = '🛡️ PROTECTED! We pin the PUBLIC certificate - attacker can\'t fake it!';
-
-            btn.textContent = '▶️ Play Protection';
-            btn.classList.remove('playing');
-        }
-
-        // Reset functions
-        function resetSSL() {
-            const stage = document.getElementById('ssl-stage');
-            stage.querySelectorAll('.packet, .connection-line, .detail-box').forEach(el => el.remove());
-            document.getElementById('ssl-status').textContent = 'Click Play to watch the SSL handshake process';
-            document.getElementById('server-keys').style.display = 'none';
-
-            // Reset step button
-            const stepBtn = document.getElementById('ssl-step');
-            stepBtn.disabled = false;
-            stepBtn.textContent = '⏭️ Next Step';
-
-            // Reset client element styles
-            const clientEl = stage.querySelector('.client');
-            if (clientEl) {
-                clientEl.style.animation = '';
-                clientEl.style.boxShadow = '';
-            }
-
-            sslAnimationState = {};
-        }
-
-        function resetMITM() {
-            const stage = document.getElementById('mitm-stage');
-            stage.querySelectorAll('.packet, .connection-line').forEach(el => el.remove());
-            document.getElementById('mitm-attacker').classList.remove('show');
-            document.getElementById('decrypt-box').classList.remove('show');
-            document.getElementById('mitm-warning').classList.remove('show');
-            document.getElementById('client-thinks').style.display = 'none';
-            document.getElementById('server-thinks').style.display = 'none';
-            document.getElementById('mitm-status').textContent = 'See how attackers intercept "secure" connections';
-        }
-
-        function resetPinning() {
-            const stage = document.getElementById('pin-stage');
-            stage.querySelectorAll('.packet, .connection-line').forEach(el => el.remove());
-            document.getElementById('pin-attacker').classList.remove('show');
-            document.getElementById('pin-shield').classList.remove('show');
-            document.getElementById('pinned-cert').classList.remove('show');
-            document.getElementById('fake-cert').classList.remove('show');
-            document.getElementById('real-cert').classList.remove('show');
-            document.getElementById('comparison-box').classList.remove('show');
-            document.getElementById('pin-block').classList.remove('show');
-            document.getElementById('pin-status').textContent = 'Learn how apps protect against MITM by "pinning" the exact certificate';
-        }
-
-        // Event listeners
-        document.getElementById('ssl-play').addEventListener('click', () => {
-            sslCurrentStep = 0;
-            playSSL();
-        });
-        document.getElementById('ssl-step').addEventListener('click', stepSSL);
-        document.getElementById('ssl-reset').addEventListener('click', () => {
-            sslCurrentStep = 0;
-            resetSSL();
-        });
-
-        document.getElementById('mitm-play').addEventListener('click', playMITM);
-        document.getElementById('mitm-reset').addEventListener('click', resetMITM);
-
-        document.getElementById('pin-play').addEventListener('click', playPinning);
-        document.getElementById('pin-reset').addEventListener('click', resetPinning);
+        // Initialize all animations
+        const tlsSimplified = new TLSSimplifiedAnimation();
+        const mitmAttack = new MITMAnimation();
+        const sslPinning = new SSLPinningAnimation();
+        const tls13Handshake = new TLS13HandshakeAnimation();
+        const tls12Handshake = new TLS12HandshakeAnimation();
     </script>
 </body>
 </html>

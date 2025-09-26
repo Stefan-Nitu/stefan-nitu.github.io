@@ -78,10 +78,11 @@ button.playing {
 .stage {
     position: relative;
     width: 100%;
-    height: 650px;
+    min-height: 800px;
+    padding-bottom: 50px;
     background: rgba(0,0,0,0.3);
     border-radius: 15px;
-    overflow: hidden;
+    overflow: visible;
     border: 2px solid rgba(255,255,255,0.1);
 }
 
@@ -113,7 +114,7 @@ button.playing {
     overflow: visible;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 5px;
 }
 
@@ -154,6 +155,7 @@ button.playing {
     border-color: #ffd700;
     box-shadow: 0 0 30px rgba(255,215,0,0.3);
     width: 120px;
+    height: 120px;
 }
 
 .entity-icon {
@@ -177,12 +179,12 @@ button.playing {
     font-weight: bold;
     z-index: 60;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    white-space: nowrap;
+    white-space: normal;
     opacity: 0;
     transform: scale(0);
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 170px;
+    text-align: center;
+    line-height: 1.2;
 }
 
 .packet.show {
@@ -207,30 +209,31 @@ button.playing {
     border: 2px solid #ff00ff;
 }
 
+.packet-cert {
+    background: linear-gradient(135deg, #00ff88, #00cc66);
+    color: #000;
+    border: 2px solid #00ff88;
+}
+
 .packet-fake {
     background: linear-gradient(135deg, #ff6b6b, #ff4444);
     color: white;
     border: 2px solid #ff0000;
 }
 
-.packet-cert {
-    background: linear-gradient(135deg, #ffd700, #ffcc00);
-    color: #000;
-    border: 2px solid #ffd700;
-}
-
 .detail-box {
     position: absolute;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0,0,0,0.95);
     border: 2px solid #00ffff;
     border-radius: 10px;
-    padding: 12px;
+    padding: 15px;
     font-size: 11px;
     color: white;
     z-index: 80;
-    line-height: 1.4;
-    max-width: 250px;
+    line-height: 1.5;
+    max-width: 320px;
     transition: opacity 0.5s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
 .detail-box strong {
@@ -278,6 +281,17 @@ button.playing {
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Key-Pair Visual Enhancements */
@@ -357,16 +371,7 @@ button.playing {
     border: 1px dashed #ff6b6b;
 }
 
-/* Packet colors to match certificates */
-.packet-cert {
-    background: linear-gradient(135deg, #00ff88, #00cc66) !important;
-    color: #000 !important;
-}
-
-.packet-fake {
-    background: linear-gradient(135deg, #ff6b6b, #ff4444) !important;
-    color: #fff !important;
-}
+/* Packet colors to match certificates - removed duplicates, using !important above */
 
 @keyframes shake {
     0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
@@ -376,11 +381,13 @@ button.playing {
 
 .description {
     margin-top: 20px;
-    padding: 15px;
+    padding: 20px;
     background: rgba(0,0,0,0.5);
     border-radius: 10px;
     text-align: center;
     min-height: 60px;
     font-size: 14px;
     line-height: 1.6;
+    position: relative;
+    z-index: 1;
 }
