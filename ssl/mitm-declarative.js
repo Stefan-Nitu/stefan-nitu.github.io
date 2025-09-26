@@ -264,12 +264,12 @@ class MITMAnimation extends DeclarativeAnimation {
                     const reencrypted = await anim.sendPacket(
                         this.attackerEl,
                         this.serverEl,
-                        '🔒 Password →',    
+                        '🔒 Password →',
                         'packet-encrypted',
                         { key: 'reencrypted', duration: 1500 }
                     );
                 },
-                show: ['keyInsight', 'password', 'decryptBox', 'decrypted', 'reencrypted'],
+                show: ['keyInsight', 'decryptBox', 'reencrypted'],
                 hide: ['certDetail', 'fakeCert', 'realCert'],
                 persist: ['line1', 'line2']
             },
@@ -313,7 +313,7 @@ class MITMAnimation extends DeclarativeAnimation {
                     anim.registerElement('warning', warning);
                 },
                 show: ['breachSummary', 'warning'],
-                hide: ['keyInsight', 'password', 'decryptBox', 'reencrypted', 'line1', 'line2'],
+                hide: ['keyInsight', 'decryptBox', 'reencrypted', 'line1', 'line2'],
                 persist: []
             }
         ]);
