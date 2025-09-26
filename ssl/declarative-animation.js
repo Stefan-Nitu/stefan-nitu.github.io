@@ -210,26 +210,41 @@ class DeclarativeAnimation {
         packet.className = `packet ${className}`;
         packet.innerHTML = label;
 
+        const isMobile = window.innerWidth <= 768;
+
         // Get entity positions and sizes
         const fromRect = from.getBoundingClientRect();
         const toRect = to.getBoundingClientRect();
         const stageRect = this.stage.getBoundingClientRect();
 
         // Calculate packet dimensions - responsive for mobile
-        const isMobile = window.innerWidth <= 768;
         const packetWidth = isMobile ? 120 : 170;
         const packetHeight = isMobile ? 24 : 30;
 
         // Calculate positions relative to stage
-        const fromCenter = {
-            x: fromRect.left - stageRect.left + fromRect.width / 2,
-            y: fromRect.top - stageRect.top + fromRect.height / 2
-        };
+        let fromCenter, toCenter;
 
-        const toCenter = {
-            x: toRect.left - stageRect.left + toRect.width / 2,
-            y: toRect.top - stageRect.top + toRect.height / 2
-        };
+        if (isMobile) {
+            // On mobile, account for scroll position and use offsetLeft/offsetTop
+            fromCenter = {
+                x: from.offsetLeft + from.offsetWidth / 2,
+                y: from.offsetTop + from.offsetHeight / 2
+            };
+            toCenter = {
+                x: to.offsetLeft + to.offsetWidth / 2,
+                y: to.offsetTop + to.offsetHeight / 2
+            };
+        } else {
+            // Desktop uses getBoundingClientRect as before
+            fromCenter = {
+                x: fromRect.left - stageRect.left + fromRect.width / 2,
+                y: fromRect.top - stageRect.top + fromRect.height / 2
+            };
+            toCenter = {
+                x: toRect.left - stageRect.left + toRect.width / 2,
+                y: toRect.top - stageRect.top + toRect.height / 2
+            };
+        }
 
         // Calculate direction vector
         const dx = toCenter.x - fromCenter.x;
