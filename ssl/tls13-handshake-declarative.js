@@ -412,7 +412,7 @@ class TLS13HandshakeAnimation extends DeclarativeAnimation {
                         • Uses application traffic secret<br>
                         • No need to wait!<br>
                         <br>
-                        <span style="color: #ffff00">50% faster than TLS 1.2!</span>
+                        <span style="color: #ffff00">30-40% faster than TLS 1.2!</span>
                     `, {
                         key: 'earlyData',
                         style: {
