@@ -1,5 +1,62 @@
 /* Mobile Responsive Styles for TLS Animations */
 
+/* Mobile Notice - Show on Mobile */
+@media (max-width: 768px) {
+    .mobile-notice {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .notice-content {
+        background: linear-gradient(135deg, #1a1a3e 0%, #2a2a4e 100%);
+        border: 2px solid #00ffff;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .notice-content h2 {
+        color: #00ffff;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+    }
+
+    .notice-content p {
+        color: #ffffff;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+
+    .notice-content button {
+        background: linear-gradient(135deg, #00ff88, #00cc66);
+        color: #000;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: all 0.3s;
+    }
+
+    .notice-content button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+    }
+}
+
 /* Tablet screens (768px to 1024px) */
 @media (max-width: 1024px) {
     .stage {
