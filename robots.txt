@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://stefan-nitu.com/sitemap.xml
+Sitemap: https://stefan-nitu.github.io/sitemap.xml
