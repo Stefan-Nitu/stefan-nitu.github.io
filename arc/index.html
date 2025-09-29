@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARC Memory Management Explained - Visual Animations</title>
+    <meta name="description" content="Learn iOS/Swift ARC through visual animations. Understand strong, weak, and unowned references, retain cycles, and memory leaks.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 ARC Memory Management Explained</h1>
+        <p class="subtitle">Understanding Swift's Automatic Reference Counting</p>
+
+        <!-- Strong References 101 -->
+        <div class="demo-section">
+            <h2>1. Strong References Basics</h2>
+            <div class="controls">
+                <button id="strong-play">▶️ Play Animation</button>
+                <button id="strong-step">⏭️ Next Step</button>
+                <button id="strong-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="strong-stage">
+                <div class="step-indicator" id="strong-status">
+                    Watch how reference counting tracks object lifetime
+                </div>
+
+                <div class="arc-object" id="strong-obj" style="left: 50%; top: 250px; transform: translateX(-50%);">
+                    <div class="object-header">
+                        <span class="object-type">class Person</span>
+                        <div class="ref-count" id="strong-obj-count">0</div>
+                    </div>
+                    <div class="object-body">
+                        <div class="property">name: "John"</div>
+                        <div class="property">age: 30</div>
+                    </div>
+                </div>
+
+                <div class="arc-monitor">
+                    <div class="monitor-icon">🔍</div>
+                    <div class="monitor-label">ARC</div>
+                </div>
+            </div>
+
+            <div class="description">
+                Strong references increment the retain count. Object deallocates when count reaches 0
+            </div>
+        </div>
+
+        <!-- Weak References -->
+        <div class="demo-section">
+            <h2>2. Weak References</h2>
+            <div class="controls">
+                <button id="weak-play">▶️ Play Animation</button>
+                <button id="weak-step">⏭️ Next Step</button>
+                <button id="weak-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="weak-stage">
+                <div class="step-indicator" id="weak-status">
+                    Weak references don't increase retain count and become nil when object deallocates
+                </div>
+
+                <div class="arc-object" id="weak-obj" style="left: 50%; top: 250px; transform: translateX(-50%);">
+                    <div class="object-header">
+                        <span class="object-type">class Person</span>
+                        <div class="ref-count" id="weak-obj-count">0</div>
+                    </div>
+                    <div class="object-body">
+                        <div class="property">name: "John"</div>
+                    </div>
+                </div>
+
+                <div class="arc-monitor">
+                    <div class="monitor-icon">🔍</div>
+                    <div class="monitor-label">ARC</div>
+                </div>
+            </div>
+
+            <div class="description">
+                Weak references are perfect for delegates and avoiding retain cycles
+            </div>
+        </div>
+
+        <!-- Retain Cycle Problem -->
+        <div class="demo-section">
+            <h2>3. Retain Cycle - Memory Leak ⚠️</h2>
+            <div class="controls">
+                <button id="cycle-play">▶️ Play Animation</button>
+                <button id="cycle-step">⏭️ Next Step</button>
+                <button id="cycle-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="cycle-stage">
+                <div class="step-indicator" id="cycle-status">
+                    See how two objects can keep each other alive forever
+                </div>
+
+                <div class="arc-object" id="cycle-parent" style="left: 20%; top: 250px;">
+                    <div class="object-header">
+                        <span class="object-type">class Parent</span>
+                        <div class="ref-count" id="cycle-parent-count">0</div>
+                    </div>
+                    <div class="object-body">
+                        <div class="property">child: Child?</div>
+                    </div>
+                </div>
+
+                <div class="arc-object" id="cycle-child" style="right: 20%; top: 250px;">
+                    <div class="object-header">
+                        <span class="object-type">class Child</span>
+                        <div class="ref-count" id="cycle-child-count">0</div>
+                    </div>
+                    <div class="object-body">
+                        <div class="property">parent: Parent?</div>
+                    </div>
+                </div>
+
+                <div class="arc-monitor">
+                    <div class="monitor-icon">🔍</div>
+                    <div class="monitor-label">ARC</div>
+                </div>
+            </div>
+
+            <div class="description">
+                Both objects reference each other strongly - they can never be deallocated!
+            </div>
+        </div>
+
+        <!-- Fix: Weak to the Rescue -->
+        <div class="demo-section">
+            <h2>4. Breaking the Cycle with Weak ✅</h2>
+            <div class="controls">
+                <button id="fix-play">▶️ Play Animation</button>
+                <button id="fix-step">⏭️ Next Step</button>
+                <button id="fix-reset">🔄 Reset</button>
+            </div>
+
+            <div class="stage" id="fix-stage">
+                <div class="step-indicator" id="fix-status">
+                    Using weak reference breaks the cycle and allows proper deallocation
+                </div>
+
+                <div class="arc-object" id="fix-parent" style="left: 20%; top: 250px;">
+                    <div class="object-header">
+                        <span class="object-type">class Parent</span>
+                        <div class="ref-count" id="fix-parent-count">0</div>
+                    </div>
+                    <div class="object-body">
+                        <div class="property">child: Child?</div>
+                    </div>
+                </div>
+
+                <div class="arc-object" id="fix-child" style="right: 20%; top: 250px;">
+                    <div class="object-header">
+                        <span class="object-type">class Child</span>
+                        <div class="ref-count" id="fix-child-count">0</div>
+                    </div>
+                    <div class="object-body">
+                        <div class="property">weak parent: Parent?</div>
+                    </div>
+                </div>
+
+                <div class="arc-monitor">
+                    <div class="monitor-icon">🔍</div>
+                    <div class="monitor-label">ARC</div>
+                </div>
+            </div>
+
+            <div class="description">
+                Child's weak reference doesn't prevent Parent from being deallocated
+            </div>
+        </div>
+    </div>
+
+    <script src="declarative-animation.js"></script>
+    <script src="shared.js"></script>
+    <script src="arc-strong-refs.js"></script>
+    <script src="arc-weak-refs.js"></script>
+    <script src="arc-retain-cycle.js"></script>
+    <script src="arc-cycle-fix.js"></script>
+
+    <script>
+        const strongRefsAnim = new StrongReferencesAnimation();
+        const weakRefsAnim = new WeakReferencesAnimation();
+        const retainCycleAnim = new RetainCycleAnimation();
+        const cycleFixAnim = new CycleFixAnimation();
+    </script>
+</body>
+</html>
