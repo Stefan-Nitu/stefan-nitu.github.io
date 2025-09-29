@@ -1,0 +1,264 @@
+/* Mobile Responsive Styles for ARC Animations */
+
+/* Mobile Notice - Show on Mobile */
+@media (max-width: 768px) {
+    .mobile-notice {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .notice-content {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border: 2px solid #667eea;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .notice-content h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+    }
+
+    .notice-content p {
+        color: #ffffff;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+
+    .notice-content button {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: #fff;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: all 0.3s;
+    }
+
+    .notice-content button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+}
+
+/* Tablet screens (768px to 1024px) */
+@media (max-width: 1024px) {
+    .stage {
+        min-height: 650px;
+    }
+
+    .arc-object {
+        width: 180px;
+        font-size: 12px;
+    }
+
+    .detail-box {
+        max-width: 300px;
+        font-size: 11px;
+    }
+}
+
+/* Mobile screens (up to 768px) */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-size: 1.1em;
+    }
+
+    .demo-section {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 12px;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 11px;
+        flex: 1;
+        min-width: 80px;
+        max-width: 120px;
+    }
+
+    .stage {
+        min-height: 600px;
+        max-height: 70vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 60px 10px 20px 10px;
+    }
+
+    .step-indicator {
+        font-size: 11px;
+        padding: 10px;
+        min-height: 40px;
+    }
+
+    .arc-object {
+        width: 150px;
+        padding: 8px;
+        font-size: 10px;
+        transform: scale(0.9);
+    }
+
+    .object-header {
+        padding: 8px 10px;
+    }
+
+    .object-type {
+        font-size: 11px;
+    }
+
+    .ref-count {
+        font-size: 14px;
+        padding: 4px 10px;
+        min-width: 35px;
+    }
+
+    .object-body {
+        padding: 10px;
+    }
+
+    .property {
+        font-size: 10px;
+        padding: 3px 0;
+    }
+
+    .detail-box {
+        max-width: 280px;
+        font-size: 9px;
+        padding: 10px;
+        line-height: 1.4;
+    }
+
+    .ref-label {
+        font-size: 9px;
+        padding: 4px 8px;
+    }
+
+    .arc-monitor {
+        width: 60px;
+        height: 60px;
+        top: 60px;
+        right: 20px;
+    }
+
+    .monitor-icon {
+        font-size: 22px;
+    }
+
+    .monitor-label {
+        font-size: 9px;
+    }
+
+    .warning-badge {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+
+    .description {
+        padding: 15px;
+        font-size: 12px;
+    }
+
+    /* Reference boxes in weak refs animation */
+    .animation-element[style*="person"] {
+        font-size: 10px !important;
+        padding: 8px 15px !important;
+    }
+}
+
+/* Very small screens (below 380px) */
+@media (max-width: 380px) {
+    h1 {
+        font-size: 1.3em;
+    }
+
+    .demo-section {
+        padding: 10px;
+    }
+
+    .stage {
+        min-height: 550px;
+    }
+
+    .arc-object {
+        width: 130px;
+        transform: scale(0.85);
+    }
+
+    .detail-box {
+        max-width: 240px;
+        font-size: 8px;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 10px;
+        padding: 6px 12px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .stage {
+        min-height: 450px;
+        max-height: 60vh;
+    }
+
+    .arc-object {
+        transform: scale(0.8);
+    }
+
+    .detail-box {
+        max-width: 70%;
+        font-size: 8px;
+    }
+}
+
+/* Ensure animations work smoothly on mobile */
+@media (max-width: 768px) {
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}

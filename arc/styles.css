@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+/* Mobile Notice - Hidden on Desktop */
+.mobile-notice {
+    display: none;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'SF Mono', Monaco, monospace;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);

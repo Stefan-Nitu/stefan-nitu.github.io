@@ -6,8 +6,19 @@
     <title>ARC Memory Management Explained - Visual Animations</title>
     <meta name="description" content="Learn iOS/Swift ARC through visual animations. Understand strong, weak, and unowned references, retain cycles, and memory leaks.">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile-responsive.css">
 </head>
 <body>
+    <!-- Mobile Notice -->
+    <div id="mobile-notice" class="mobile-notice" style="display: none;">
+        <div class="notice-content">
+            <h2>📱 Desktop Recommended</h2>
+            <p>These interactive animations are designed for desktop screens.</p>
+            <p>For the best experience, please visit on a laptop or desktop computer.</p>
+            <button onclick="document.getElementById('mobile-notice').remove()">View Anyway</button>
+        </div>
+    </div>
+
     <div class="container">
         <h1>🧠 ARC Memory Management Explained</h1>
         <p class="subtitle">Understanding Swift's Automatic Reference Counting</p>
