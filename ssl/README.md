@@ -1,89 +1,66 @@
-# SSL/TLS Animation Visualizations
+# TLS/SSL Security Explained
 
-Interactive visualizations demonstrating SSL/TLS security concepts including handshakes, MITM attacks, and certificate pinning.
+Interactive step-by-step visualizations explaining TLS/SSL security concepts through animations. Learn how secure connections work, understand MITM attacks, certificate pinning, and the differences between TLS 1.2 and TLS 1.3 protocols.
 
-## 🏗️ Structure
+## 🎯 Live Demo
+
+View the animations at: [https://stefan-nitu.github.io/ssl/](https://stefan-nitu.github.io/ssl/)
+
+## 📚 What You'll Learn
+
+### Core Concepts (Simplified)
+1. **How Secure Connections Work** - Basic TLS handshake explained visually
+2. **Man-in-the-Middle Attacks** - See how attackers intercept connections
+3. **Certificate Pinning** - Learn how apps defend against MITM attacks
+
+### Advanced Protocol Details
+4. **TLS 1.3 Handshake** - Modern 1-RTT handshake with forward secrecy
+5. **TLS 1.2 Handshake** - Classic 2-RTT handshake process
+
+## 🏗️ Architecture
 
 ```
 ssl/
-├── index.html          # Main animation page
-├── styles.css          # Visual styles
+├── index.html                      # Main page with all animations
+├── styles.css                      # Base visual styles
+├── mobile-responsive.css           # Mobile device adaptations
+├── preview.png                     # Social media preview image
 │
-├── shared.js           # Base animation framework
-├── config.js           # Timing and positioning config
-├── animations.js       # Reusable animation patterns
-├── sleep-patch.js      # Interruptible sleep for clean resets
+├── shared.js                       # Utility functions & helpers
+├── declarative-animation.js        # Core animation framework
 │
-├── handshake.js        # SSL handshake animation
-├── mitm.js            # Man-in-the-middle attack demo
-├── pinning.js         # Certificate pinning protection
-│
-└── tests/
-    ├── animations.test.js  # Unit tests for reset behavior
-    └── handshake.test.js   # Integration tests
+└── Animation implementations (declarative):
+    ├── tls-simplified-declarative.js       # Basic TLS explanation
+    ├── mitm-declarative.js                 # MITM attack demo
+    ├── pinning-declarative.js              # Certificate pinning
+    ├── tls13-handshake-declarative.js      # TLS 1.3 protocol
+    └── tls12-handshake-declarative.js      # TLS 1.2 protocol
 ```
 
-## 🚀 Running
+## 🚀 Getting Started
 
-Open `ssl/index.html` in a browser to view the animations.
+Simply open [index.html](index.html) in a modern web browser. No build process or dependencies required.
 
-## 🧪 Testing
+**Note:** Designed for desktop viewing. Mobile users will see a recommendation to view on desktop for the best experience.
 
-```bash
-# Install dependencies
-npm install
+## 🎨 Animation System
 
-# Run all tests
-npm test
+The declarative animation framework (`declarative-animation.js`) provides:
 
-# Watch mode
-npm run test:watch
+- **Step-by-step control**: Play, pause, step through, and reset animations
+- **Visual feedback**: Status indicators, entity states, and message flows
+- **Reusable components**: Packets, detail boxes, certificates, and key displays
+- **Responsive design**: Adapts to different screen sizes
 
-# Coverage report
-npm run test:coverage
-```
+### Key Components
 
-## 🔑 Key Features
+Each animation extends the base `DeclarativeAnimation` class and defines:
+- **Steps**: Discrete animation phases with descriptions
+- **Actions**: Visual operations (show/hide elements, move packets, display details)
+- **State management**: Clean resets and proper cleanup
 
-### Proper Reset Handling
-- Animations can be cleanly stopped mid-execution
-- State is preserved across resets (no new object creation)
-- Sleep operations check `shouldStop` flag frequently
-- UI updates correctly after interruption
+## 📱 Responsive Design
 
-### Organized Animation System
-- **BaseAnimation**: Core animation lifecycle
-- **AnimationSequence**: Reusable packet movements and detail boxes
-- **EnhancedAnimationState**: Extended state with timing controls
-- **Standardized positioning**: Consistent bubble placement zones
-
-### Test Coverage
-- Unit tests for reset behavior and state management
-- Integration tests for actual animation classes
-- Tests verify animations stop immediately when reset
-- Ensures UI elements clean up properly
-
-## 📐 Animation Zones
-
-Detail boxes use standardized positioning zones for consistency:
-
-- `main-center` (350px from top, centered)
-- `main-left` (350px from top, left side)
-- `main-right` (350px from top, right side)
-- `bottom-center` (480px from top, centered)
-- `bottom-left` (480px from top, left side)
-- `bottom-right` (480px from top, right side)
-
-## 🎯 Reset Behavior
-
-The reset functionality ensures animations stop immediately:
-
-1. Sets `shouldStop = true` on shared state
-2. Sleep operations check flag every 50ms and exit early
-3. Waits for animation promise to complete
-4. Cleans up DOM elements
-5. Resets state (except `shouldStop`)
-6. Updates UI buttons
-7. Finally clears `shouldStop`
-
-This prevents animations from continuing after reset is clicked.
+- Desktop: Full interactive experience with all animations
+- Mobile: Notice recommending desktop viewing (dismissible)
+- Adaptive layouts for smaller screens
